@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
-import { ArrowLeft, Edit2, MoreVertical, Plus } from "lucide-react";
+import { StudyPlanModal } from "@/components/ai/StudyPlanModal";
+import { ArrowLeft, Edit2, MoreVertical, Plus, Sparkles } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import type { Project } from "@/types/database";
 
@@ -12,6 +13,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   const supabase = createClient();
   const queryClient = useQueryClient();
   const [showActions, setShowActions] = useState(false);
+  const [showStudyPlan, setShowStudyPlan] = useState(false);
 
   const { data: project, isLoading } = useQuery({
     queryKey: ["project", params.id],
@@ -85,7 +87,16 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative flex gap-2">
+          {project.exam_date && (
+            <button
+              onClick={() => setShowStudyPlan(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition"
+            >
+              <Sparkles size={20} />
+              Generate Plan
+            </button>
+          )}
           <button
             onClick={() => setShowActions(!showActions)}
             className="p-2 hover:bg-gray-100 rounded-lg transition"
@@ -94,7 +105,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           </button>
 
           {showActions && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10">
+            <div className="absolute right-0 mt-10 w-48 bg-white rounded-lg shadow-lg z-10">
               <Link
                 href={`/app/projects/${project.id}/edit`}
                 className="block px-4 py-2 hover:bg-gray-50 transition flex items-center gap-2"
@@ -172,6 +183,15 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           <p>No tasks yet. Create one to get started!</p>
         </div>
       </div>
+
+      {/* Study Plan Modal */}
+      {project.exam_date && (
+        <StudyPlanModal
+          project={project}
+          open={showStudyPlan}
+          onOpenChange={setShowStudyPlan}
+        />
+      )}
     </div>
   );
 }

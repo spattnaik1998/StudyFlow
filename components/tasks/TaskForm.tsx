@@ -19,8 +19,16 @@ export function TaskForm({ task, projectId, onSubmit }: TaskFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const projectFromParams = searchParams.get("project");
+  // Check both "project" and "project_id" params
+  const projectFromParams = searchParams.get("project") || searchParams.get("project_id") || "";
   const initialProjectId = projectId || projectFromParams || "";
+
+  // Read AI-provided params
+  const aiTitle = searchParams.get("title") || "";
+  const aiPriority = searchParams.get("priority") || "";
+  const aiDueDate = searchParams.get("due_date") || "";
+  const aiEstimatedDuration = searchParams.get("estimated_duration_mins") || "";
+  const aiTags = searchParams.get("tags") || "";
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],
@@ -37,14 +45,14 @@ export function TaskForm({ task, projectId, onSubmit }: TaskFormProps) {
 
   const [formData, setFormData] = useState({
     project_id: task?.project_id || initialProjectId,
-    title: task?.title || "",
+    title: task?.title || aiTitle || "",
     description: task?.description || "",
-    priority: task?.priority || "medium",
+    priority: task?.priority || aiPriority || "medium",
     status: task?.status || "todo",
-    due_date: task?.due_date || "",
+    due_date: task?.due_date || aiDueDate || "",
     due_time: task?.due_time || "",
-    estimated_duration_mins: task?.estimated_duration_mins || 30,
-    tags: task?.tags?.join(", ") || "",
+    estimated_duration_mins: task?.estimated_duration_mins || (aiEstimatedDuration ? parseInt(aiEstimatedDuration) : 30),
+    tags: task?.tags?.join(", ") || aiTags || "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
