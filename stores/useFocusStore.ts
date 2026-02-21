@@ -1,6 +1,15 @@
 import { create } from "zustand";
+import { createClient } from "@/lib/supabase/client";
 
 type SessionState = "idle" | "running" | "paused" | "break" | "completed";
+
+interface CompactSession {
+  date: string;
+  duration: number;
+  quality: number;
+  task?: string;
+  distractions: number;
+}
 
 interface FocusSession {
   id?: string;
@@ -21,6 +30,7 @@ interface FocusStore extends FocusSession {
   startSession: (taskId?: string) => void;
   pauseSession: () => void;
   resumeSession: () => void;
+  skipBreak: () => void;
   endSession: (quality: number, journal: string) => Promise<void>;
   resetSession: () => void;
 
@@ -67,13 +77,64 @@ export const useFocusStore = create<FocusStore>((set, get) => ({
     get().saveToLocalStorage();
   },
 
+  skipBreak: () => {
+    set({ state: "idle", elapsedSeconds: 0 });
+    get().saveToLocalStorage();
+  },
+
   endSession: async (quality: number, journal: string) => {
+    const state = get();
     set({
       state: "completed",
       qualityRating: quality,
       journalEntry: journal,
     });
-    // TODO: Save to database
+
+    // Save to localStorage session history
+    if (typeof window !== "undefined") {
+      try {
+        const history = JSON.parse(
+          localStorage.getItem("sf_session_history") || "[]"
+        ) as CompactSession[];
+
+        const newSession: CompactSession = {
+          date: new Date().toISOString(),
+          duration: state.elapsedSeconds,
+          quality,
+          distractions: state.distractionCount,
+        };
+
+        // Keep max 50 sessions
+        const updated = [newSession, ...history].slice(0, 50);
+        localStorage.setItem("sf_session_history", JSON.stringify(updated));
+      } catch (e) {
+        console.error("Failed to save session history", e);
+      }
+    }
+
+    // Save to Supabase (gracefully skip if no auth)
+    try {
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        await supabase.from("task_sessions").insert({
+          user_id: session.user.id,
+          task_id: state.taskId || null,
+          started_at: state.startedAt,
+          ended_at: new Date().toISOString(),
+          quality_rating: quality,
+          journal_entry: journal,
+          distraction_count: state.distractionCount,
+          session_type: "work",
+        });
+      }
+    } catch (error) {
+      console.warn("Could not save session to database", error);
+    }
+
     setTimeout(() => get().resetSession(), 2000);
   },
 
@@ -100,6 +161,14 @@ export const useFocusStore = create<FocusStore>((set, get) => ({
 
         if (newElapsed >= workSeconds) {
           return { state: "break", elapsedSeconds: 0 };
+        }
+        return { elapsedSeconds: newElapsed };
+      } else if (state.state === "break") {
+        const newElapsed = state.elapsedSeconds + 1;
+        const breakSeconds = state.breakMinutes * 60;
+
+        if (newElapsed >= breakSeconds) {
+          return { state: "idle", elapsedSeconds: 0 };
         }
         return { elapsedSeconds: newElapsed };
       }

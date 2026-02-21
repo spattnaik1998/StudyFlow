@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useUIStore } from "@/stores/useUIStore";
-import { Menu, X, Plus, LayoutDashboard, Calendar, BookOpen, Settings } from "lucide-react";
+import { Menu, X, Plus, LayoutDashboard, Calendar, BookOpen, Settings, Timer } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import type { Project } from "@/types/database";
@@ -82,6 +81,14 @@ export function Sidebar() {
             >
               <Calendar size={20} />
               <span>Schedule</span>
+            </Link>
+
+            <Link
+              href="/app/focus"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+            >
+              <Timer size={20} />
+              <span>Focus</span>
             </Link>
 
             {/* Projects Section */}
