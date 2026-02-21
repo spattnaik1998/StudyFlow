@@ -1,0 +1,4 @@
+# Ignore all files for now - we'll clean up linting later
+node_modules/
+.next/
+out/
