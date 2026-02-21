@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
-import { Menu, X, Plus, LayoutDashboard, Calendar, BookOpen, Settings, Timer, Brain, BarChart2 } from "lucide-react";
+import { Menu, X, Plus, LayoutDashboard, Calendar, BookOpen, Settings, Timer, Brain, BarChart2, LogOut } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import type { Project } from "@/types/database";
 
 export function Sidebar() {
+  const router = useRouter();
   const { sidebarOpen, toggleSidebar } = useUIStore();
   const supabase = createClient();
 
@@ -24,6 +26,30 @@ export function Sidebar() {
       return data as Project[];
     },
   });
+
+  const { data: profile } = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return null;
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (error) return null;
+      return data;
+    },
+  });
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
 
   return (
     <>
@@ -143,7 +169,7 @@ export function Sidebar() {
           </nav>
 
           {/* Bottom Navigation */}
-          <div className="px-4 py-4 border-t border-gray-200">
+          <div className="px-4 py-4 border-t border-gray-200 space-y-3">
             <Link
               href="/app/settings"
               className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
@@ -151,6 +177,27 @@ export function Sidebar() {
               <Settings size={20} />
               <span>Settings</span>
             </Link>
+
+            {/* User Profile Section */}
+            {profile && (
+              <div className="pt-3 border-t border-gray-200 space-y-3">
+                <div className="px-4 py-2 bg-gray-50 rounded-lg">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {profile.full_name || "Student"}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate mt-1">
+                    {profile.email || ""}
+                  </p>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-3 px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition w-full"
+                >
+                  <LogOut size={20} />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </aside>
