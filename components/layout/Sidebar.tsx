@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useUIStore } from "@/stores/useUIStore";
-import { Menu, X, Plus, LayoutDashboard, Calendar, BookOpen, Settings, Timer } from "lucide-react";
+import { Menu, X, Plus, LayoutDashboard, Calendar, BookOpen, Settings, Timer, Brain } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import type { Project } from "@/types/database";
@@ -89,6 +89,14 @@ export function Sidebar() {
             >
               <Timer size={20} />
               <span>Focus</span>
+            </Link>
+
+            <Link
+              href="/app/topics"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+            >
+              <Brain size={20} />
+              <span>Learn</span>
             </Link>
 
             {/* Projects Section */}
