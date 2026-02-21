@@ -8,6 +8,8 @@ interface UIState {
   setCurrentView: (view: "list" | "board" | "timeline" | "calendar") => void;
   selectedProjectId: string | null;
   setSelectedProjectId: (id: string | null) => void;
+  commandPaletteOpen: boolean;
+  setCommandPaletteOpen: (open: boolean) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -18,4 +20,6 @@ export const useUIStore = create<UIState>((set) => ({
   setCurrentView: (view) => set({ currentView: view }),
   selectedProjectId: null,
   setSelectedProjectId: (id) => set({ selectedProjectId: id }),
+  commandPaletteOpen: false,
+  setCommandPaletteOpen: (open) => set({ commandPaletteOpen: open }),
 }));
