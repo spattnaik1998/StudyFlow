@@ -131,7 +131,7 @@ export function StudyPlanModal({
 
             <div className="space-y-6 py-4">
               <div>
-                <label className="text-sm font-medium block mb-2">
+                <label className="text-sm font-medium block mb-2 text-gray-300">
                   Topics/Chapters (comma-separated)
                 </label>
                 <Input
@@ -142,7 +142,7 @@ export function StudyPlanModal({
               </div>
 
               <div>
-                <label className="text-sm font-medium block mb-2">
+                <label className="text-sm font-medium block mb-2 text-gray-300">
                   Hours per day: {hoursPerDay}h
                 </label>
                 <input
@@ -169,7 +169,7 @@ export function StudyPlanModal({
               </div>
 
               {generatePlan.isError && (
-                <div className="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-700">
+                <div className="bg-red-900/20 border border-red-500/30 rounded p-3 text-sm text-red-400">
                   {generatePlan.error instanceof Error
                     ? generatePlan.error.message
                     : "Failed to generate plan"}
@@ -188,12 +188,12 @@ export function StudyPlanModal({
 
             <div className="space-y-4 max-h-96 overflow-y-auto py-4">
               {generatedBlocks.map((block, idx) => (
-                <Card key={idx} className="border-l-4" style={{borderLeftColor: block.color}}>
+                <Card key={idx} className="border-l-4" style={{ borderLeftColor: block.color }}>
                   <CardContent className="pt-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-medium">{block.title}</h3>
-                        <p className="text-sm text-gray-600">
+                        <h3 className="font-medium text-white">{block.title}</h3>
+                        <p className="text-sm text-zinc-400">
                           {new Date(block.start_time).toLocaleDateString()} •{" "}
                           {new Date(block.start_time).toLocaleTimeString([], {
                             hour: "2-digit",
@@ -205,7 +205,7 @@ export function StudyPlanModal({
                             minute: "2-digit",
                           })}
                         </p>
-                        <span className="inline-block mt-1 text-xs px-2 py-1 rounded bg-gray-100 text-gray-700">
+                        <span className="inline-block mt-1 text-xs px-2 py-1 rounded bg-white/10 text-zinc-400">
                           {block.block_type}
                         </span>
                       </div>
@@ -233,7 +233,7 @@ export function StudyPlanModal({
             </div>
 
             {addToSchedule.isError && (
-              <div className="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-700">
+              <div className="bg-red-900/20 border border-red-500/30 rounded p-3 text-sm text-red-400">
                 {addToSchedule.error instanceof Error
                   ? addToSchedule.error.message
                   : "Failed to add blocks"}

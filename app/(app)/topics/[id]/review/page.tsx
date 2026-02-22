@@ -20,7 +20,6 @@ export default function ReviewSessionPage() {
   const [phase, setPhase] = useState<ReviewPhase>("studying");
   const [selectedQuality, setSelectedQuality] = useState<number | null>(null);
 
-  // Fetch topic
   const { data: topic, isLoading: topicLoading } = useQuery({
     queryKey: ["topic", topicId],
     queryFn: async () => {
@@ -35,16 +34,13 @@ export default function ReviewSessionPage() {
     },
   });
 
-  // Submit review mutation
   const submitMutation = useMutation({
     mutationFn: async (quality: number) => {
       if (!topic) throw new Error("Topic not found");
 
-      // Get current user
       const { data } = await supabase.auth.getSession();
       const userId = data?.session?.user?.id ?? "dev";
 
-      // Compute SM-2 result
       const sm2Result = computeSM2(
         quality,
         topic.sm2_ease_factor,
@@ -52,7 +48,6 @@ export default function ReviewSessionPage() {
         topic.sm2_repetitions
       );
 
-      // Update topic with new SM-2 values
       const { error: updateError } = await supabase
         .from("topics")
         .update({
@@ -67,7 +62,6 @@ export default function ReviewSessionPage() {
 
       if (updateError) throw updateError;
 
-      // Record review in topic_reviews table
       const { error: reviewError } = await supabase.from("topic_reviews").insert([
         {
           topic_id: topicId,
@@ -96,51 +90,27 @@ export default function ReviewSessionPage() {
   };
 
   const qualityOptions = [
-    {
-      value: 0,
-      label: "0 — Complete blackout",
-      description: "Total failure to recall",
-    },
-    {
-      value: 1,
-      label: "1 — Incorrect answer",
-      description: "But recognized the correct answer",
-    },
-    {
-      value: 2,
-      label: "2 — Incorrect, felt easy",
-      description: "The correct answer felt easy",
-    },
-    {
-      value: 3,
-      label: "3 — Correct, with difficulty",
-      description: "Correct answer after some struggle",
-    },
-    {
-      value: 4,
-      label: "4 — Correct, with hesitation",
-      description: "Correct with minor hesitation",
-    },
-    {
-      value: 5,
-      label: "5 — Perfect recall",
-      description: "Instant recall with confidence",
-    },
+    { value: 0, label: "0 — Complete blackout", description: "Total failure to recall" },
+    { value: 1, label: "1 — Incorrect answer", description: "But recognized the correct answer" },
+    { value: 2, label: "2 — Incorrect, felt easy", description: "The correct answer felt easy" },
+    { value: 3, label: "3 — Correct, with difficulty", description: "Correct answer after some struggle" },
+    { value: 4, label: "4 — Correct, with hesitation", description: "Correct with minor hesitation" },
+    { value: 5, label: "5 — Perfect recall", description: "Instant recall with confidence" },
   ];
 
   if (topicLoading) {
-    return <div className="text-center py-12 text-gray-600">Loading topic...</div>;
+    return <div className="text-center py-12 text-zinc-400">Loading topic...</div>;
   }
 
   if (!topic) {
-    return <div className="text-center py-12 text-gray-600">Topic not found</div>;
+    return <div className="text-center py-12 text-zinc-400">Topic not found</div>;
   }
 
   return (
     <div>
       <Link
         href={`/topics/${topicId}`}
-        className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 mb-8 w-fit"
+        className="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 mb-8 w-fit"
       >
         <ArrowLeft size={18} />
         Back to topic
@@ -150,14 +120,14 @@ export default function ReviewSessionPage() {
         {/* Studying Phase */}
         {phase === "studying" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-lg border border-gray-200 p-8">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+            <div className="bg-zinc-900 border border-white/10 rounded-xl p-8">
+              <h2 className="text-sm font-semibold text-zinc-500 uppercase mb-2">
                 Review Session
               </h2>
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">{topic.name}</h1>
+              <h1 className="text-4xl font-bold text-white mb-4">{topic.name}</h1>
 
               {topic.description && (
-                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                <p className="text-lg text-zinc-400 mb-6 leading-relaxed">
                   {topic.description}
                 </p>
               )}
@@ -170,7 +140,7 @@ export default function ReviewSessionPage() {
                 onClick={() => setPhase("rating")}
                 className="w-full px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium text-lg"
               >
-                I've reviewed this topic →
+                I&apos;ve reviewed this topic →
               </button>
             </div>
           </div>
@@ -179,8 +149,8 @@ export default function ReviewSessionPage() {
         {/* Rating Phase */}
         {phase === "rating" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-lg border border-gray-200 p-8">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase mb-4">
+            <div className="bg-zinc-900 border border-white/10 rounded-xl p-8">
+              <h2 className="text-sm font-semibold text-zinc-500 uppercase mb-4">
                 How well did you know this?
               </h2>
 
@@ -191,12 +161,12 @@ export default function ReviewSessionPage() {
                     onClick={() => setSelectedQuality(option.value)}
                     className={`w-full p-4 rounded-lg border-2 text-left transition ${
                       selectedQuality === option.value
-                        ? "border-indigo-600 bg-indigo-50"
-                        : "border-gray-200 bg-white hover:border-gray-300"
+                        ? "border-indigo-500 bg-indigo-900/30"
+                        : "border-white/10 bg-white/5 hover:border-white/20"
                     }`}
                   >
-                    <div className="font-semibold text-gray-900">{option.label}</div>
-                    <div className="text-sm text-gray-600 mt-1">{option.description}</div>
+                    <div className="font-semibold text-white">{option.label}</div>
+                    <div className="text-sm text-zinc-400 mt-1">{option.description}</div>
                   </button>
                 ))}
               </div>
@@ -215,22 +185,22 @@ export default function ReviewSessionPage() {
         {/* Done Phase */}
         {phase === "done" && topic && (
           <div className="space-y-6">
-            <div className="bg-white rounded-lg border border-gray-200 p-8">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase mb-4">
+            <div className="bg-zinc-900 border border-white/10 rounded-xl p-8">
+              <h2 className="text-sm font-semibold text-zinc-500 uppercase mb-4">
                 Review Complete! 🎉
               </h2>
 
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">Great work!</h1>
+              <h1 className="text-3xl font-bold text-white mb-6">Great work!</h1>
 
               <div className="mb-6">
-                <p className="text-gray-600 mb-2">Your new mastery level:</p>
+                <p className="text-zinc-400 mb-2">Your new mastery level:</p>
                 <MasteryBadge level={topic.mastery_level} />
               </div>
 
               {topic.next_review_at && (
-                <div className="mb-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-sm text-gray-600">Next review:</p>
-                  <p className="text-lg font-semibold text-gray-900">
+                <div className="mb-8 p-4 bg-white/5 rounded-xl border border-white/10">
+                  <p className="text-sm text-zinc-500">Next review:</p>
+                  <p className="text-lg font-semibold text-white">
                     {new Date(topic.next_review_at).toLocaleDateString("en-US", {
                       weekday: "short",
                       month: "short",
@@ -243,7 +213,7 @@ export default function ReviewSessionPage() {
               <div className="flex gap-3">
                 <Link
                   href="/topics"
-                  className="flex-1 px-6 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition font-medium text-center"
+                  className="flex-1 px-6 py-3 bg-white/10 text-gray-300 rounded-lg hover:bg-white/20 transition font-medium text-center"
                 >
                   Back to Topics
                 </Link>

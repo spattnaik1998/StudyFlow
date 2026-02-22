@@ -10,10 +10,10 @@ interface WeekCalendarProps {
   onBlockClick: (block: ScheduleBlock) => void;
 }
 
-const HOUR_HEIGHT = 64; // px per hour
-const START_HOUR = 6; // 6 AM
-const END_HOUR = 22; // 10 PM
-const HOURS = END_HOUR - START_HOUR; // 16 hours
+const HOUR_HEIGHT = 64;
+const START_HOUR = 6;
+const END_HOUR = 22;
+const HOURS = END_HOUR - START_HOUR;
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -23,14 +23,12 @@ export function WeekCalendar({
   onSlotClick,
   onBlockClick,
 }: WeekCalendarProps) {
-  // Generate day dates
   const days = Array.from({ length: 7 }, (_, i) => {
     const date = new Date(weekStart);
     date.setDate(date.getDate() + i);
     return date;
   });
 
-  // Group blocks by day (using local time, not UTC)
   const blocksByDay = days.map((day) =>
     blocks.filter((block) => {
       const blockDate = new Date(block.start_time);
@@ -56,23 +54,23 @@ export function WeekCalendar({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="bg-zinc-900 border border-white/10 rounded-xl overflow-hidden">
       {/* Header row with day names */}
       <div className="flex" style={{ minWidth: "900px" }}>
         {/* Time column header */}
-        <div style={{ width: 80, flexShrink: 0 }} className="border-b border-gray-200 bg-gray-50" />
+        <div style={{ width: 80, flexShrink: 0 }} className="border-b border-white/10 bg-white/5" />
 
         {/* Day headers */}
         {days.map((day, i) => (
           <div
             key={i}
             style={{ flex: 1, minWidth: 0 }}
-            className={`border-b border-l border-gray-200 p-3 text-center font-semibold ${
-              isToday(day) ? "bg-indigo-50" : "bg-gray-50"
+            className={`border-b border-l border-white/10 p-3 text-center font-semibold ${
+              isToday(day) ? "bg-indigo-900/20" : "bg-white/5"
             }`}
           >
-            <div className="text-sm text-gray-600">{DAYS[day.getDay() === 0 ? 6 : day.getDay() - 1]}</div>
-            <div className={`text-lg ${isToday(day) ? "text-indigo-600" : "text-gray-900"}`}>
+            <div className="text-sm text-zinc-400">{DAYS[day.getDay() === 0 ? 6 : day.getDay() - 1]}</div>
+            <div className={`text-lg ${isToday(day) ? "text-indigo-400" : "text-white"}`}>
               {day.getDate()}
             </div>
           </div>
@@ -89,7 +87,7 @@ export function WeekCalendar({
               return (
                 <div
                   key={`time-${hour}`}
-                  className="border-b border-gray-200 pr-2 py-2 text-right text-xs text-gray-500"
+                  className="border-b border-white/5 pr-2 py-2 text-right text-xs text-zinc-500"
                   style={{ height: HOUR_HEIGHT }}
                 >
                   {formatHour(hour)}
@@ -103,7 +101,7 @@ export function WeekCalendar({
             <div
               key={`day-${dayIndex}`}
               style={{ flex: 1, minWidth: 0, position: "relative", height: HOURS * HOUR_HEIGHT }}
-              className="border-l border-gray-200"
+              className="border-l border-white/10"
             >
               {/* Hour divider lines */}
               {Array.from({ length: HOURS }, (_, hourIndex) => (
@@ -114,7 +112,7 @@ export function WeekCalendar({
                     top: hourIndex * HOUR_HEIGHT,
                     height: 1,
                     width: "100%",
-                    backgroundColor: "#e5e7eb",
+                    backgroundColor: "rgba(255,255,255,0.05)",
                   }}
                 />
               ))}
@@ -156,7 +154,7 @@ export function WeekCalendar({
                 style={{ position: "absolute", inset: 0 }}
                 data-day-index={dayIndex}
                 onClick={handleDayClick}
-                className="cursor-pointer hover:bg-indigo-50 hover:bg-opacity-30 transition"
+                className="cursor-pointer hover:bg-indigo-500/5 transition"
               />
             </div>
           ))}

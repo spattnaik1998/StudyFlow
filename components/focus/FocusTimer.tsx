@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import type { Task } from "@/types/database";
 
-const CIRCUMFERENCE = 2 * Math.PI * 90; // SVG circle radius = 90
+const CIRCUMFERENCE = 2 * Math.PI * 90;
 
 export function FocusTimer() {
   const {
@@ -37,20 +37,17 @@ export function FocusTimer() {
     },
   });
 
-  // Determine duration based on state
   const totalSeconds =
     state === "break" ? breakMinutes * 60 : workMinutes * 60;
   const progress = elapsedSeconds / totalSeconds;
   const offset = CIRCUMFERENCE * (1 - progress);
 
-  // Format time
   const mins = Math.floor(elapsedSeconds / 60);
   const secs = elapsedSeconds % 60;
   const timeStr = `${mins.toString().padStart(2, "0")}:${secs
     .toString()
     .padStart(2, "0")}`;
 
-  // Colors based on state
   const ringColor =
     state === "running"
       ? "text-indigo-500"
@@ -58,21 +55,21 @@ export function FocusTimer() {
         ? "text-emerald-500"
         : state === "paused"
           ? "text-amber-500"
-          : "text-gray-300";
+          : "text-zinc-600";
 
   const badgeText = state === "break" ? "BREAK" : "FOCUS";
   const badgeBg =
     state === "break"
-      ? "bg-emerald-100 text-emerald-700"
+      ? "bg-emerald-900/30 text-emerald-400"
       : state === "running"
-        ? "bg-indigo-100 text-indigo-700"
-        : "bg-amber-100 text-amber-700";
+        ? "bg-indigo-900/30 text-indigo-400"
+        : "bg-amber-900/30 text-amber-400";
 
   return (
     <div className="w-full max-w-md mx-auto">
       {/* Task Selector */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Task (Optional)
         </label>
         <select
@@ -80,17 +77,16 @@ export function FocusTimer() {
           onChange={(e) => {
             if (state === "idle") {
               startSession(e.target.value || undefined);
-              // Don't actually start, just set the task
               const { resetSession } = useFocusStore.getState();
               resetSession();
               useFocusStore.getState().startSession(e.target.value || undefined);
             }
           }}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-3 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          <option value="">No task selected</option>
+          <option value="" className="bg-zinc-900">No task selected</option>
           {tasks.map((task) => (
-            <option key={task.id} value={task.id}>
+            <option key={task.id} value={task.id} className="bg-zinc-900">
               {task.title}
             </option>
           ))}
@@ -103,17 +99,15 @@ export function FocusTimer() {
           viewBox="0 0 200 200"
           className="w-full h-full transform -rotate-90"
         >
-          {/* Background circle */}
           <circle
             cx="100"
             cy="100"
             r="90"
             fill="none"
-            stroke="#e5e7eb"
+            stroke="rgba(255,255,255,0.1)"
             strokeWidth="8"
           />
 
-          {/* Progress circle */}
           <motion.circle
             cx="100"
             cy="100"
@@ -131,7 +125,7 @@ export function FocusTimer() {
 
         {/* Center display */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className="text-5xl font-bold text-gray-900 font-mono">
+          <div className="text-5xl font-bold text-white font-mono">
             {timeStr}
           </div>
           <div className={`mt-2 px-3 py-1 rounded-full text-sm font-semibold ${badgeBg}`}>
@@ -186,25 +180,23 @@ export function FocusTimer() {
         )}
 
         {state === "break" && (
-          <>
-            <button
-              onClick={skipBreak}
-              className="px-6 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition"
-            >
-              Skip Break
-            </button>
-          </>
+          <button
+            onClick={skipBreak}
+            className="px-6 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition"
+          >
+            Skip Break
+          </button>
         )}
       </div>
 
       {/* Distraction Counter */}
-      <div className="flex items-center justify-center gap-4 p-4 bg-gray-50 rounded-lg">
-        <span className="text-sm font-medium text-gray-700">
-          Distractions: <span className="text-2xl font-bold">{distractionCount}</span>
+      <div className="flex items-center justify-center gap-4 p-4 bg-white/5 border border-white/10 rounded-xl">
+        <span className="text-sm font-medium text-gray-300">
+          Distractions: <span className="text-2xl font-bold text-white">{distractionCount}</span>
         </span>
         <button
           onClick={incrementDistraction}
-          className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium hover:bg-red-200 transition"
+          className="px-4 py-2 bg-red-900/20 text-red-400 border border-red-500/30 rounded-full text-sm font-medium hover:bg-red-900/30 transition"
         >
           +1 Distraction
         </button>

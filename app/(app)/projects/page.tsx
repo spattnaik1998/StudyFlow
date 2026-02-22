@@ -25,15 +25,15 @@ export default function ProjectsPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Your Projects</h1>
-        <p className="text-gray-600">
+        <h1 className="text-4xl font-bold text-white mb-2">Your Projects</h1>
+        <p className="text-zinc-400">
           Manage your courses and subjects. Click on a project to view tasks.
         </p>
       </div>
 
       {isLoading ? (
         <div className="text-center py-12">
-          <p className="text-gray-600">Loading projects...</p>
+          <p className="text-zinc-400">Loading projects...</p>
         </div>
       ) : (
         <ProjectGrid projects={projects} />

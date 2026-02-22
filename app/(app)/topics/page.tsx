@@ -13,7 +13,6 @@ export default function TopicsPage() {
   const [filterProject, setFilterProject] = useState<string>("");
   const [filterMastery, setFilterMastery] = useState<string>("");
 
-  // Fetch all topics with their projects
   const { data: topics = [] } = useQuery({
     queryKey: ["topics"],
     queryFn: async () => {
@@ -27,7 +26,6 @@ export default function TopicsPage() {
     },
   });
 
-  // Fetch projects for filter dropdown
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
@@ -42,14 +40,12 @@ export default function TopicsPage() {
     },
   });
 
-  // Filter topics
   const filteredTopics = topics.filter((topic) => {
     if (filterProject && topic.project_id !== filterProject) return false;
     if (filterMastery && topic.mastery_level !== filterMastery) return false;
     return true;
   });
 
-  // Find topics due for review
   const now = new Date();
   const dueTopics = topics.filter(
     (topic) => topic.next_review_at && new Date(topic.next_review_at) <= now
@@ -68,8 +64,8 @@ export default function TopicsPage() {
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-gray-900">Topics</h1>
-          <p className="text-gray-600 mt-2">Your spaced repetition learning library</p>
+          <h1 className="text-4xl font-bold text-white">Topics</h1>
+          <p className="text-zinc-400 mt-2">Your spaced repetition learning library</p>
         </div>
 
         <Link
@@ -83,19 +79,17 @@ export default function TopicsPage() {
 
       {/* Due for review banner */}
       {dueTopics.length > 0 && (
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mb-6 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
           <div className="flex items-center justify-between">
-            <p className="text-blue-900 font-medium">
+            <p className="text-blue-300 font-medium">
               {dueTopics.length} topic{dueTopics.length !== 1 ? "s" : ""} due for review today
             </p>
-            {dueTopics.length > 0 && (
-              <Link
-                href={`/topics/${dueTopics[0].id}/review`}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm font-medium"
-              >
-                Start Review Session
-              </Link>
-            )}
+            <Link
+              href={`/topics/${dueTopics[0].id}/review`}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm font-medium"
+            >
+              Start Review Session
+            </Link>
           </div>
         </div>
       )}
@@ -103,15 +97,15 @@ export default function TopicsPage() {
       {/* Filters */}
       <div className="mb-6 flex gap-4 flex-wrap">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Project</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Project</label>
           <select
             value={filterProject}
             onChange={(e) => setFilterProject(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+            className="px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">All Projects</option>
+            <option value="" className="bg-zinc-900">All Projects</option>
             {projects.map((p) => (
-              <option key={p.id} value={p.id}>
+              <option key={p.id} value={p.id} className="bg-zinc-900">
                 {p.name}
               </option>
             ))}
@@ -119,15 +113,15 @@ export default function TopicsPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Mastery Level</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Mastery Level</label>
           <select
             value={filterMastery}
             onChange={(e) => setFilterMastery(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+            className="px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">All Levels</option>
+            <option value="" className="bg-zinc-900">All Levels</option>
             {masteryLevels.map((level) => (
-              <option key={level.value} value={level.value}>
+              <option key={level.value} value={level.value} className="bg-zinc-900">
                 {level.label}
               </option>
             ))}
@@ -138,7 +132,7 @@ export default function TopicsPage() {
       {/* Topics grid */}
       {filteredTopics.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-600 mb-4">No topics found</p>
+          <p className="text-zinc-400 mb-4">No topics found</p>
           {topics.length === 0 && (
             <Link
               href="/topics/new"

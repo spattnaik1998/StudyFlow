@@ -60,8 +60,8 @@ export default function TasksPage() {
     <div>
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-gray-900">Tasks</h1>
-          <p className="text-gray-600 mt-2">View and manage all your study tasks</p>
+          <h1 className="text-4xl font-bold text-white">Tasks</h1>
+          <p className="text-zinc-400 mt-2">View and manage all your study tasks</p>
         </div>
 
         <div className="flex gap-3">
@@ -84,7 +84,7 @@ export default function TasksPage() {
 
       {/* AI Input */}
       {showAI && firstProjectId && (
-        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+        <div className="mb-6 p-4 bg-amber-900/20 border border-amber-500/30 rounded-lg">
           <AITaskInput projectId={firstProjectId} />
         </div>
       )}
@@ -96,7 +96,7 @@ export default function TasksPage() {
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             view === "list"
               ? "bg-indigo-600 text-white"
-              : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+              : "bg-white/5 border border-white/20 text-gray-300 hover:bg-white/10"
           }`}
         >
           <List size={20} />
@@ -107,7 +107,7 @@ export default function TasksPage() {
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             view === "board"
               ? "bg-indigo-600 text-white"
-              : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+              : "bg-white/5 border border-white/20 text-gray-300 hover:bg-white/10"
           }`}
         >
           <LayoutGrid size={20} />
@@ -118,7 +118,7 @@ export default function TasksPage() {
       {/* Content */}
       {tasksLoading ? (
         <div className="text-center py-12">
-          <p className="text-gray-600">Loading tasks...</p>
+          <p className="text-zinc-400">Loading tasks...</p>
         </div>
       ) : (
         <>

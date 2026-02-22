@@ -47,7 +47,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   if (isLoading) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">Loading project...</p>
+        <p className="text-zinc-400">Loading project...</p>
       </div>
     );
   }
@@ -55,8 +55,8 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   if (!project) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600 mb-4">Project not found</p>
-        <Link href="/projects" className="text-indigo-600 hover:underline">
+        <p className="text-zinc-400 mb-4">Project not found</p>
+        <Link href="/projects" className="text-indigo-400 hover:underline">
           Back to projects
         </Link>
       </div>
@@ -70,19 +70,19 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         <div className="flex items-center gap-4">
           <Link
             href="/projects"
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            className="p-2 hover:bg-white/10 rounded-lg transition"
           >
-            <ArrowLeft size={24} />
+            <ArrowLeft size={24} className="text-zinc-400" />
           </Link>
 
           <div>
             <div className="flex items-center gap-3 mb-2">
               {project.emoji && <span className="text-4xl">{project.emoji}</span>}
-              <h1 className="text-4xl font-bold text-gray-900">{project.name}</h1>
+              <h1 className="text-4xl font-bold text-white">{project.name}</h1>
             </div>
 
             {project.course_code && (
-              <p className="text-gray-600">{project.course_code}</p>
+              <p className="text-zinc-400">{project.course_code}</p>
             )}
           </div>
         </div>
@@ -99,16 +99,16 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           )}
           <button
             onClick={() => setShowActions(!showActions)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            className="p-2 hover:bg-white/10 rounded-lg transition"
           >
-            <MoreVertical size={24} />
+            <MoreVertical size={24} className="text-zinc-400" />
           </button>
 
           {showActions && (
-            <div className="absolute right-0 mt-10 w-48 bg-white rounded-lg shadow-lg z-10">
+            <div className="absolute right-0 mt-10 w-48 bg-zinc-800 border border-white/10 rounded-lg shadow-lg z-10">
               <Link
                 href={`/projects/${project.id}/edit`}
-                className="block px-4 py-2 hover:bg-gray-50 transition flex items-center gap-2"
+                className="flex items-center gap-2 px-4 py-2 hover:bg-white/10 text-zinc-300 transition"
               >
                 <Edit2 size={16} />
                 Edit Project
@@ -119,7 +119,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                     deleteMutation.mutate();
                   }
                 }}
-                className="block w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 transition"
+                className="block w-full text-left px-4 py-2 hover:bg-red-900/20 text-red-400 transition"
               >
                 Archive Project
               </button>
@@ -131,45 +131,45 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
       {/* Project info */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {project.exam_date && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 uppercase mb-2">
+          <div className="bg-zinc-900 border border-white/10 rounded-xl p-6">
+            <h3 className="text-sm font-medium text-zinc-500 uppercase mb-2">
               Exam Date
             </h3>
-            <p className="text-2xl font-bold text-gray-900">{formatDate(project.exam_date)}</p>
+            <p className="text-2xl font-bold text-white">{formatDate(project.exam_date)}</p>
           </div>
         )}
 
         {project.instructor && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 uppercase mb-2">
+          <div className="bg-zinc-900 border border-white/10 rounded-xl p-6">
+            <h3 className="text-sm font-medium text-zinc-500 uppercase mb-2">
               Instructor
             </h3>
-            <p className="text-lg font-semibold text-gray-900">{project.instructor}</p>
+            <p className="text-lg font-semibold text-white">{project.instructor}</p>
           </div>
         )}
 
         {project.credit_hours && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 uppercase mb-2">
+          <div className="bg-zinc-900 border border-white/10 rounded-xl p-6">
+            <h3 className="text-sm font-medium text-zinc-500 uppercase mb-2">
               Credit Hours
             </h3>
-            <p className="text-2xl font-bold text-gray-900">{project.credit_hours}</p>
+            <p className="text-2xl font-bold text-white">{project.credit_hours}</p>
           </div>
         )}
       </div>
 
       {/* Description */}
       {project.description && (
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Description</h2>
-          <p className="text-gray-700 whitespace-pre-wrap">{project.description}</p>
+        <div className="bg-zinc-900 border border-white/10 rounded-xl p-6 mb-8">
+          <h2 className="text-lg font-bold text-white mb-4">Description</h2>
+          <p className="text-zinc-300 whitespace-pre-wrap">{project.description}</p>
         </div>
       )}
 
       {/* Tasks section */}
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-zinc-900 border border-white/10 rounded-xl p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-gray-900">Tasks</h2>
+          <h2 className="text-lg font-bold text-white">Tasks</h2>
           <Link
             href={`/tasks/new?project=${project.id}`}
             className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
@@ -179,7 +179,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           </Link>
         </div>
 
-        <div className="text-center py-12 text-gray-600">
+        <div className="text-center py-12 text-zinc-500">
           <p>No tasks yet. Create one to get started!</p>
         </div>
       </div>

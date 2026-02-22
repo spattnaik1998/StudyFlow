@@ -17,9 +17,9 @@ interface TaskBoardProps {
 type StatusType = "todo" | "in_progress" | "done";
 
 const statuses: Array<{ id: StatusType; label: string; color: string }> = [
-  { id: "todo", label: "To Do", color: "bg-gray-100" },
-  { id: "in_progress", label: "In Progress", color: "bg-blue-100" },
-  { id: "done", label: "Done", color: "bg-green-100" },
+  { id: "todo", label: "To Do", color: "bg-white/5" },
+  { id: "in_progress", label: "In Progress", color: "bg-blue-900/20" },
+  { id: "done", label: "Done", color: "bg-green-900/20" },
 ];
 
 export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
@@ -45,7 +45,6 @@ export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
   const deleteTaskMutation = useMutation({
     mutationFn: async (taskId: string) => {
       const { error } = await supabase.from("tasks").delete().eq("id", taskId);
-
       if (error) throw error;
     },
     onSuccess: () => {
@@ -82,7 +81,7 @@ export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
       case "medium":
         return "border-l-blue-500";
       default:
-        return "border-l-gray-300";
+        return "border-l-zinc-600";
     }
   };
 
@@ -94,12 +93,12 @@ export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
         return (
           <div
             key={status.id}
-            className={`${status.color} rounded-lg p-4 min-w-[300px] min-h-[500px]`}
+            className={`${status.color} border border-white/10 rounded-xl p-4 min-w-[300px] min-h-[500px]`}
             onDragOver={handleDragOver}
             onDrop={() => handleDrop(status.id)}
           >
             <div className="mb-4">
-              <h3 className="font-semibold text-gray-900 text-lg">
+              <h3 className="font-semibold text-white text-lg">
                 {status.label} ({statusTasks.length})
               </h3>
             </div>
@@ -110,18 +109,18 @@ export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
                   key={task.id}
                   draggable
                   onDragStart={() => handleDragStart(task)}
-                  className={`bg-white rounded-lg shadow p-4 cursor-move hover:shadow-md transition border-l-4 ${getPriorityColor(
+                  className={`group bg-zinc-900 border border-white/10 rounded-lg shadow p-4 cursor-move hover:border-white/20 transition border-l-4 ${getPriorityColor(
                     task.priority
                   )}`}
                 >
                   <div className="flex items-start gap-2 mb-3">
-                    <GripVertical size={16} className="text-gray-400 mt-1 flex-shrink-0" />
+                    <GripVertical size={16} className="text-zinc-600 mt-1 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-gray-900 text-sm truncate">
+                      <h4 className="font-medium text-white text-sm truncate">
                         {task.title}
                       </h4>
                       {task.due_date && (
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-zinc-500 mt-1">
                           Due: {formatDate(task.due_date)}
                         </p>
                       )}
@@ -133,13 +132,13 @@ export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
                       {task.tags.slice(0, 2).map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-1 rounded text-xs bg-indigo-100 text-indigo-700"
+                          className="px-2 py-1 rounded text-xs bg-indigo-900/30 text-indigo-300"
                         >
                           {tag}
                         </span>
                       ))}
                       {task.tags.length > 2 && (
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-zinc-500">
                           +{task.tags.length - 2} more
                         </span>
                       )}
@@ -147,13 +146,13 @@ export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
                   )}
 
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-medium text-gray-600">
+                    <span className="text-xs font-medium text-zinc-500">
                       {projects.get(task.project_id)?.name || "—"}
                     </span>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
                       <Link
                         href={`/tasks/${task.id}/edit`}
-                        className="p-1 hover:bg-gray-200 rounded transition opacity-0 group-hover:opacity-100"
+                        className="p-1 hover:bg-white/10 rounded transition text-zinc-400"
                         title="Edit"
                       >
                         <Edit2 size={14} />
@@ -164,7 +163,7 @@ export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
                             deleteTaskMutation.mutate(task.id);
                           }
                         }}
-                        className="p-1 hover:bg-red-100 text-red-600 rounded transition opacity-0 group-hover:opacity-100"
+                        className="p-1 hover:bg-red-900/20 text-red-400 rounded transition"
                         title="Delete"
                       >
                         <Trash2 size={14} />

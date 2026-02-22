@@ -27,7 +27,7 @@ export function TopicCard({ topic }: TopicCardProps) {
 
   return (
     <Link href={`/topics/${topic.id}`}>
-      <div className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition h-full flex flex-col cursor-pointer">
+      <div className="bg-zinc-900 border border-white/10 rounded-xl p-5 hover:border-white/20 hover:shadow-lg transition h-full flex flex-col cursor-pointer">
         {/* Header with project */}
         {project && (
           <div className="flex items-center gap-2 mb-3">
@@ -35,16 +35,16 @@ export function TopicCard({ topic }: TopicCardProps) {
               className="w-3 h-3 rounded-full flex-shrink-0"
               style={{ backgroundColor: project.color }}
             />
-            <span className="text-xs font-medium text-gray-600">{project.name}</span>
+            <span className="text-xs font-medium text-zinc-400">{project.name}</span>
           </div>
         )}
 
         {/* Topic name */}
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">{topic.name}</h3>
+        <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2">{topic.name}</h3>
 
         {/* Description */}
         {topic.description && (
-          <p className="text-sm text-gray-600 mb-3 line-clamp-2 flex-grow">
+          <p className="text-sm text-zinc-400 mb-3 line-clamp-2 flex-grow">
             {topic.description}
           </p>
         )}
@@ -55,19 +55,19 @@ export function TopicCard({ topic }: TopicCardProps) {
         </div>
 
         {/* Footer row */}
-        <div className="flex items-center justify-between pt-3 border-t border-gray-100 text-xs">
+        <div className="flex items-center justify-between pt-3 border-t border-white/5 text-xs">
           <div>
             {isDueNow ? (
-              <span className="font-medium text-red-600">Due now!</span>
+              <span className="font-medium text-red-400">Due now!</span>
             ) : nextReview ? (
-              <span className="text-gray-600">
+              <span className="text-zinc-400">
                 In {daysUntilReview} day{daysUntilReview !== 1 ? "s" : ""}
               </span>
             ) : (
-              <span className="text-gray-500">Not started</span>
+              <span className="text-zinc-500">Not started</span>
             )}
           </div>
-          <span className="text-gray-500">{intervalLabel}</span>
+          <span className="text-zinc-500">{intervalLabel}</span>
         </div>
       </div>
     </Link>

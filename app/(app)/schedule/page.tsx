@@ -47,7 +47,6 @@ export default function SchedulePage() {
 
   const weekEnd = getWeekEnd(weekStart);
 
-  // Fetch schedule blocks for this week
   const { data: blocks = [], isLoading } = useQuery({
     queryKey: ["schedule_blocks", weekStart.toISOString()],
     queryFn: async () => {
@@ -63,7 +62,6 @@ export default function SchedulePage() {
     },
   });
 
-  // Fetch projects for form dropdown
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
@@ -77,7 +75,6 @@ export default function SchedulePage() {
     },
   });
 
-  // Create mutation
   const createMutation = useMutation({
     mutationFn: async (block: Omit<ScheduleBlock, "id" | "created_at" | "updated_at">) => {
       const { error } = await supabase.from("schedule_blocks").insert([block]);
@@ -91,7 +88,6 @@ export default function SchedulePage() {
     },
   });
 
-  // Update mutation
   const updateMutation = useMutation({
     mutationFn: async (block: ScheduleBlock) => {
       const { error } = await supabase
@@ -108,7 +104,6 @@ export default function SchedulePage() {
     },
   });
 
-  // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase.from("schedule_blocks").delete().eq("id", id);
@@ -176,8 +171,8 @@ export default function SchedulePage() {
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-gray-900">Weekly Schedule</h1>
-          <p className="text-gray-600 mt-2">Manage your study blocks and time allocation</p>
+          <h1 className="text-4xl font-bold text-white">Weekly Schedule</h1>
+          <p className="text-zinc-400 mt-2">Manage your study blocks and time allocation</p>
         </div>
 
         <button
@@ -193,25 +188,25 @@ export default function SchedulePage() {
       <div className="mb-6 flex items-center justify-center gap-4">
         <button
           onClick={handlePrevWeek}
-          className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
+          className="p-2 rounded-lg border border-white/20 hover:bg-white/10 text-zinc-300 transition"
         >
           <ChevronLeft size={20} />
         </button>
 
         <div className="text-center min-w-64">
-          <p className="text-lg font-semibold text-gray-900">{formatWeekRange(weekStart)}</p>
+          <p className="text-lg font-semibold text-white">{formatWeekRange(weekStart)}</p>
         </div>
 
         <button
           onClick={handleNextWeek}
-          className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
+          className="p-2 rounded-lg border border-white/20 hover:bg-white/10 text-zinc-300 transition"
         >
           <ChevronRight size={20} />
         </button>
 
         <button
           onClick={handleToday}
-          className="ml-4 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition text-sm font-medium"
+          className="ml-4 px-4 py-2 border border-white/20 text-gray-300 rounded-lg hover:bg-white/10 transition text-sm font-medium"
         >
           Today
         </button>
@@ -220,7 +215,7 @@ export default function SchedulePage() {
       {/* Calendar grid */}
       {isLoading ? (
         <div className="text-center py-12">
-          <p className="text-gray-600">Loading schedule...</p>
+          <p className="text-zinc-400">Loading schedule...</p>
         </div>
       ) : (
         <WeekCalendar

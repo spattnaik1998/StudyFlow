@@ -15,7 +15,7 @@ export function ProjectGrid({ projects, onDelete, onEdit }: ProjectGridProps) {
   if (projects.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600 mb-6">No projects yet. Create your first course!</p>
+        <p className="text-zinc-400 mb-6">No projects yet. Create your first course!</p>
         <Link
           href="/projects/new"
           className="inline-flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
@@ -59,12 +59,12 @@ export function ProjectGrid({ projects, onDelete, onEdit }: ProjectGridProps) {
                   </div>
                 </div>
 
-                <h3 className="text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition line-clamp-2">
+                <h3 className="text-2xl font-bold text-white group-hover:text-indigo-400 transition line-clamp-2">
                   {project.name}
                 </h3>
 
                 {project.course_code && (
-                  <p className="text-sm text-gray-600 mt-1">{project.course_code}</p>
+                  <p className="text-sm text-zinc-400 mt-1">{project.course_code}</p>
                 )}
               </div>
 
@@ -74,29 +74,29 @@ export function ProjectGrid({ projects, onDelete, onEdit }: ProjectGridProps) {
                   <div
                     className={`p-3 rounded-lg mb-3 ${
                       isUrgent
-                        ? "bg-red-50 border border-red-200"
-                        : "bg-blue-50 border border-blue-200"
+                        ? "bg-red-900/30 border border-red-500/30"
+                        : "bg-blue-900/20 border border-blue-500/20"
                     }`}
                   >
-                    <p className={`text-sm font-medium ${isUrgent ? "text-red-800" : "text-blue-800"}`}>
+                    <p className={`text-sm font-medium ${isUrgent ? "text-red-300" : "text-blue-300"}`}>
                       Exam {formatDate(project.exam_date)}
                     </p>
-                    <p className={`text-xs ${isUrgent ? "text-red-600" : "text-blue-600"}`}>
+                    <p className={`text-xs ${isUrgent ? "text-red-400" : "text-blue-400"}`}>
                       {daysLeft} days left
                     </p>
                   </div>
                 )}
 
                 {project.instructor && (
-                  <p className="text-xs text-gray-500">{project.instructor}</p>
+                  <p className="text-xs text-zinc-500">{project.instructor}</p>
                 )}
               </div>
             </div>
 
             {/* Actions menu */}
             <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition">
-              <button className="p-2 rounded-lg bg-white shadow-md hover:shadow-lg transition">
-                <MoreVertical size={16} />
+              <button className="p-2 rounded-lg bg-zinc-800 border border-white/10 shadow-md hover:shadow-lg transition">
+                <MoreVertical size={16} className="text-zinc-300" />
               </button>
             </div>
           </Link>
@@ -106,11 +106,11 @@ export function ProjectGrid({ projects, onDelete, onEdit }: ProjectGridProps) {
       {/* New project card */}
       <Link
         href="/projects/new"
-        className="h-64 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center hover:border-indigo-600 hover:bg-indigo-50 transition"
+        className="h-64 rounded-xl border-2 border-dashed border-white/20 flex items-center justify-center hover:border-indigo-500 hover:bg-indigo-900/10 transition"
       >
         <div className="text-center">
-          <Plus size={48} className="text-gray-400 mx-auto mb-2" />
-          <p className="text-gray-600 font-medium">New Project</p>
+          <Plus size={48} className="text-zinc-500 mx-auto mb-2" />
+          <p className="text-zinc-400 font-medium">New Project</p>
         </div>
       </Link>
     </div>
