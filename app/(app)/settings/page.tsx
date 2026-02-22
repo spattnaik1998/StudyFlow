@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -39,11 +40,13 @@ interface UserPreferences {
 export default function SettingsPage() {
   const router = useRouter();
   const supabase = createClient();
+  const queryClient = useQueryClient();
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,10 +103,17 @@ export default function SettingsPage() {
       } = await supabase.auth.getUser();
       if (!user) return;
 
-      await supabase
+      const { error } = await supabase
         .from("profiles")
         .update({ full_name: profile.full_name })
         .eq("id", user.id);
+
+      if (!error) {
+        queryClient.invalidateQueries({ queryKey: ["profile"] });
+        router.refresh();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      }
     } catch (error) {
       console.error("Error saving profile:", error);
     } finally {
@@ -202,6 +212,7 @@ export default function SettingsPage() {
                   type="text"
                   placeholder="Your name"
                   value={profile?.full_name || ""}
+                  className="border-white/20 bg-white/5"
                   onChange={(e) =>
                     setProfile(
                       profile ? { ...profile, full_name: e.target.value } : null
@@ -226,9 +237,14 @@ export default function SettingsPage() {
                 </p>
               </div>
 
-              <Button onClick={handleProfileSave} disabled={saving}>
-                {saving ? "Saving..." : "Save Changes"}
-              </Button>
+              <div className="flex items-center gap-3">
+                <Button onClick={handleProfileSave} disabled={saving}>
+                  {saving ? "Saving..." : "Save Changes"}
+                </Button>
+                {saveSuccess && (
+                  <span className="text-sm text-green-500">✓ Saved!</span>
+                )}
+              </div>
             </div>
           </Card>
         </TabsContent>
