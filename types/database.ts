@@ -9,12 +9,15 @@ export interface Profile {
 export interface UserPreferences {
   id: string;
   user_id: string;
-  pomodoro_work_mins: number;
-  pomodoro_break_mins: number;
-  theme: "light" | "dark" | "auto";
-  energy_pattern: "morning" | "afternoon" | "evening";
-  work_hours_start: number;
-  work_hours_end: number;
+  work_duration_mins: number;
+  short_break_mins: number;
+  long_break_mins: number;
+  sessions_before_long_break: number;
+  auto_start_breaks: boolean;
+  theme: "light" | "dark" | "system";
+  energy_pattern: "morning" | "afternoon" | "evening" | "night";
+  work_hours_start: string;
+  work_hours_end: string;
   notification_enabled: boolean;
   created_at: string;
   updated_at: string;
