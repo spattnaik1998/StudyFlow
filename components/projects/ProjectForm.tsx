@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import { colorOptions } from "@/lib/utils";
 import type { Project } from "@/types/database";
@@ -18,6 +19,7 @@ interface ProjectFormProps {
 
 export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,11 +41,18 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
     setLoading(true);
 
     try {
+      // Sanitize form data: convert empty strings to null, NaN to null
+      const sanitizedData = {
+        ...formData,
+        exam_date: formData.exam_date || null,
+        credit_hours: isNaN(Number(formData.credit_hours)) ? null : formData.credit_hours,
+      };
+
       if (project) {
         // Update existing project
         const { error: updateError } = await supabase
           .from("projects")
-          .update(formData)
+          .update(sanitizedData)
           .eq("id", project.id);
 
         if (updateError) throw updateError;
@@ -56,10 +65,13 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
 
         const { error: insertError } = await supabase
           .from("projects")
-          .insert([{ ...formData, user_id: user.id }]);
+          .insert([{ ...sanitizedData, user_id: user.id }]);
 
         if (insertError) throw insertError;
       }
+
+      // Invalidate projects cache to refresh the list
+      await queryClient.invalidateQueries({ queryKey: ["projects"] });
 
       onSubmit?.();
       router.push("/projects");
