@@ -61,13 +61,17 @@ export function TaskForm({ task, projectId, onSubmit }: TaskFormProps) {
     setLoading(true);
 
     try {
+      const parsedDuration = parseInt(formData.estimated_duration_mins as any);
       const submitData = {
         ...formData,
+        // Convert empty strings to null — PostgreSQL DATE/TIME columns reject ""
+        due_date: formData.due_date || null,
+        due_time: formData.due_time || null,
+        estimated_duration_mins: isNaN(parsedDuration) ? null : parsedDuration,
         tags: formData.tags
           .split(",")
           .map((t) => t.trim())
           .filter((t) => t),
-        estimated_duration_mins: parseInt(formData.estimated_duration_mins as any),
       };
 
       if (task) {
