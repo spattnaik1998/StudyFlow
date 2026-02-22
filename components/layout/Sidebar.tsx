@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
 import { Menu, X, Plus, LayoutDashboard, Calendar, BookOpen, Settings, Timer, Brain, BarChart2, LogOut } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import type { Project } from "@/types/database";
 
 export function Sidebar() {
   const router = useRouter();
+  const pathname = usePathname();
   const { sidebarOpen, toggleSidebar } = useUIStore();
   const supabase = createClient();
 
@@ -56,7 +57,7 @@ export function Sidebar() {
       {/* Mobile menu button */}
       <button
         onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-50 md:hidden p-2 rounded-lg hover:bg-gray-100"
+        className="fixed top-4 left-4 z-50 md:hidden p-2 rounded-lg hover:bg-white/5 text-zinc-400"
       >
         {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
@@ -64,21 +65,21 @@ export function Sidebar() {
       {/* Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden"
           onClick={toggleSidebar}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 z-40 transition-transform duration-300 md:translate-x-0 ${
+        className={`fixed left-0 top-0 h-screen w-64 bg-[#0f0f17]/90 backdrop-blur-xl border-r border-white/5 z-40 transition-transform duration-300 md:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="px-6 py-8">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
               StudyFlow
             </h1>
           </div>
@@ -86,60 +87,84 @@ export function Sidebar() {
           {/* Main Navigation */}
           <nav className="flex-1 px-4 space-y-1">
             <Link
-              href="/app/dashboard"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+              href="/dashboard"
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition border-l-2 ${
+                pathname === "/dashboard"
+                  ? "bg-indigo-500/15 text-white border-l-indigo-400"
+                  : "text-zinc-400 hover:bg-white/5 hover:text-white border-l-transparent"
+              }`}
             >
               <LayoutDashboard size={20} />
               <span>Dashboard</span>
             </Link>
 
             <Link
-              href="/app/tasks"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+              href="/tasks"
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition border-l-2 ${
+                pathname === "/tasks"
+                  ? "bg-indigo-500/15 text-white border-l-indigo-400"
+                  : "text-zinc-400 hover:bg-white/5 hover:text-white border-l-transparent"
+              }`}
             >
               <BookOpen size={20} />
               <span>Tasks</span>
             </Link>
 
             <Link
-              href="/app/schedule"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+              href="/schedule"
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition border-l-2 ${
+                pathname === "/schedule"
+                  ? "bg-indigo-500/15 text-white border-l-indigo-400"
+                  : "text-zinc-400 hover:bg-white/5 hover:text-white border-l-transparent"
+              }`}
             >
               <Calendar size={20} />
               <span>Schedule</span>
             </Link>
 
             <Link
-              href="/app/focus"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+              href="/focus"
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition border-l-2 ${
+                pathname === "/focus"
+                  ? "bg-indigo-500/15 text-white border-l-indigo-400"
+                  : "text-zinc-400 hover:bg-white/5 hover:text-white border-l-transparent"
+              }`}
             >
               <Timer size={20} />
               <span>Focus</span>
             </Link>
 
             <Link
-              href="/app/topics"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+              href="/topics"
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition border-l-2 ${
+                pathname === "/topics"
+                  ? "bg-indigo-500/15 text-white border-l-indigo-400"
+                  : "text-zinc-400 hover:bg-white/5 hover:text-white border-l-transparent"
+              }`}
             >
               <Brain size={20} />
               <span>Learn</span>
             </Link>
 
             <Link
-              href="/app/analytics"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+              href="/analytics"
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition border-l-2 ${
+                pathname === "/analytics"
+                  ? "bg-indigo-500/15 text-white border-l-indigo-400"
+                  : "text-zinc-400 hover:bg-white/5 hover:text-white border-l-transparent"
+              }`}
             >
               <BarChart2 size={20} />
               <span>Analytics</span>
             </Link>
 
             {/* Projects Section */}
-            <div className="mt-8 pt-4 border-t border-gray-200">
+            <div className="mt-8 pt-4 border-t border-white/5">
               <div className="flex items-center justify-between px-4 mb-4">
-                <h3 className="text-xs font-semibold text-gray-500 uppercase">Projects</h3>
+                <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Projects</h3>
                 <Link
-                  href="/app/projects/new"
-                  className="p-1 rounded hover:bg-gray-100 transition"
+                  href="/projects/new"
+                  className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-white transition"
                   title="New project"
                 >
                   <Plus size={16} />
@@ -150,8 +175,12 @@ export function Sidebar() {
                 {projects.map((project) => (
                   <Link
                     key={project.id}
-                    href={`/app/projects/${project.id}`}
-                    className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition text-sm"
+                    href={`/projects/${project.id}`}
+                    className={`flex items-center gap-3 px-4 py-2 rounded-lg transition text-sm border-l-2 ${
+                      pathname === `/projects/${project.id}`
+                        ? "bg-indigo-500/15 text-white border-l-indigo-400"
+                        : "text-zinc-400 hover:bg-white/5 hover:text-white border-l-transparent"
+                    }`}
                   >
                     {project.emoji ? (
                       <span className="text-lg">{project.emoji}</span>
@@ -169,10 +198,14 @@ export function Sidebar() {
           </nav>
 
           {/* Bottom Navigation */}
-          <div className="px-4 py-4 border-t border-gray-200 space-y-3">
+          <div className="px-4 py-4 border-t border-white/5 space-y-3">
             <Link
-              href="/app/settings"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+              href="/settings"
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition border-l-2 ${
+                pathname === "/settings"
+                  ? "bg-indigo-500/15 text-white border-l-indigo-400"
+                  : "text-zinc-400 hover:bg-white/5 hover:text-white border-l-transparent"
+              }`}
             >
               <Settings size={20} />
               <span>Settings</span>
@@ -180,24 +213,26 @@ export function Sidebar() {
 
             {/* User Profile Section */}
             {profile && (
-              <div className="pt-3 border-t border-gray-200 space-y-3">
-                <div className="px-4 py-2 bg-gray-50 rounded-lg">
-                  <p className="text-sm font-medium text-gray-900 truncate">
+              <div className="pt-3 border-t border-white/5">
+                <div className="px-4 py-2 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-sm font-medium text-white truncate">
                     {profile.full_name || "Student"}
                   </p>
-                  <p className="text-xs text-gray-500 truncate mt-1">
+                  <p className="text-xs text-zinc-500 truncate mt-1">
                     {profile.email || ""}
                   </p>
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-3 px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition w-full"
-                >
-                  <LogOut size={20} />
-                  <span>Sign Out</span>
-                </button>
               </div>
             )}
+
+            {/* Logout: always visible */}
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-3 px-4 py-2 rounded-lg text-red-400 hover:bg-red-500/10 transition w-full"
+            >
+              <LogOut size={20} />
+              <span>Sign Out</span>
+            </button>
           </div>
         </div>
       </aside>

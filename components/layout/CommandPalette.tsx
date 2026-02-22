@@ -29,37 +29,37 @@ const navigationItems = [
   {
     label: "Go to Dashboard",
     icon: LayoutDashboard,
-    href: "/app/dashboard",
+    href: "/dashboard",
     shortcut: "D",
   },
   {
     label: "Go to Tasks",
     icon: BookOpen,
-    href: "/app/tasks",
+    href: "/tasks",
     shortcut: "T",
   },
   {
     label: "Go to Schedule",
     icon: Calendar,
-    href: "/app/schedule",
+    href: "/schedule",
     shortcut: "S",
   },
   {
     label: "Go to Focus",
     icon: Timer,
-    href: "/app/focus",
+    href: "/focus",
     shortcut: "F",
   },
   {
     label: "Go to Analytics",
     icon: BarChart2,
-    href: "/app/analytics",
+    href: "/analytics",
     shortcut: "A",
   },
   {
     label: "Go to Topics",
     icon: Brain,
-    href: "/app/topics",
+    href: "/topics",
     shortcut: "L",
   },
 ];
@@ -68,25 +68,25 @@ const actionItems = [
   {
     label: "New Task",
     icon: Plus,
-    href: "/app/tasks/new",
+    href: "/tasks/new",
     shortcut: "N",
   },
   {
     label: "New Project",
     icon: Plus,
-    href: "/app/projects/new",
+    href: "/projects/new",
     shortcut: "P",
   },
   {
     label: "Start Focus Session",
     icon: Timer,
-    href: "/app/focus",
+    href: "/focus",
     shortcut: "⏱",
   },
   {
     label: "Open Settings",
     icon: Settings,
-    href: "/app/settings",
+    href: "/settings",
     shortcut: "⚙",
   },
 ];

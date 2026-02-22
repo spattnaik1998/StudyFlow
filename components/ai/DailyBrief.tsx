@@ -17,15 +17,15 @@ export function DailyBrief() {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="glass-subtle rounded-xl border border-white/5 p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="h-5 w-5 text-amber-500" />
-          <h2 className="text-lg font-bold text-gray-900">Today's Brief</h2>
+          <Sparkles className="h-5 w-5 text-amber-400" />
+          <h2 className="text-lg font-bold text-white">Today's Brief</h2>
         </div>
         <div className="space-y-3">
-          <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-5/6"></div>
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-4/6"></div>
+          <div className="h-4 bg-white/10 rounded animate-pulse"></div>
+          <div className="h-4 bg-white/10 rounded animate-pulse w-5/6"></div>
+          <div className="h-4 bg-white/10 rounded animate-pulse w-4/6"></div>
         </div>
       </div>
     );
@@ -38,16 +38,16 @@ export function DailyBrief() {
   const { brief, generated_at, cached } = data.data;
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="glass-subtle rounded-xl border border-white/5 p-6">
       <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="h-5 w-5 text-amber-500" />
-        <h2 className="text-lg font-bold text-gray-900">Today's Brief</h2>
+        <Sparkles className="h-5 w-5 text-amber-400" />
+        <h2 className="text-lg font-bold text-white">Today's Brief</h2>
       </div>
       <div className="space-y-3">
-        <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+        <p className="text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap">
           {brief}
         </p>
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-zinc-500">
           {cached ? "Cached" : "Generated"}{" "}
           {formatDistanceToNow(new Date(generated_at), { addSuffix: true })}
         </p>

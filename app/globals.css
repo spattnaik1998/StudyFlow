@@ -3,25 +3,74 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #0f0f17;
+  --popover: #12121e;
+  --primary: #6366f1;
+  --primary-foreground: #f5f5ff;
+  --secondary: #1c1c2e;
+  --secondary-foreground: #e5e5ff;
+  --muted: #18181b;
+  --muted-foreground: #a1a1a6;
+  --accent: #1e1e2e;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --destructive-foreground: #f5f5ff;
+  --border: #27272a;
+  --input: #1c1c2e;
+  --ring: #6366f1;
+  --radius: 0.5rem;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .glass {
+    @apply bg-[rgba(15,15,23,0.7)] backdrop-blur-xl border border-indigo-500/15;
+  }
+
+  .glass-subtle {
+    @apply bg-white/[0.03] backdrop-blur-md border border-white/[0.06];
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
   }
 }

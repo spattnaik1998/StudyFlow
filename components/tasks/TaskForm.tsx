@@ -86,7 +86,7 @@ export function TaskForm({ task, projectId, onSubmit }: TaskFormProps) {
       }
 
       onSubmit?.();
-      router.push(`/app/projects/${formData.project_id}`);
+      router.push(`/projects/${formData.project_id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {

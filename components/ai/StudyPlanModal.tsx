@@ -101,7 +101,7 @@ export function StudyPlanModal({
     },
     onSuccess: () => {
       onOpenChange(false);
-      router.push("/app/schedule");
+      router.push("/schedule");
     },
   });
 

@@ -5,8 +5,9 @@ import { createServerClient } from "@supabase/ssr";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protect /app/* routes with auth guard
-  if (pathname.startsWith("/app")) {
+  // Protect app routes with auth guard
+  const protectedPaths = ["/dashboard", "/tasks", "/schedule", "/focus", "/topics", "/analytics", "/projects", "/settings"];
+  if (protectedPaths.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
     // Create a response for updating session
     let response = NextResponse.next({
       request: {
@@ -41,6 +42,11 @@ export async function middleware(request: NextRequest) {
     if (!session) {
       const loginUrl = new URL("/login", request.url);
       return NextResponse.redirect(loginUrl);
+    }
+
+    // Refresh session if needed
+    if (session) {
+      await supabase.auth.refreshSession();
     }
 
     return response;

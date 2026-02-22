@@ -73,7 +73,7 @@ export default function UpdatePasswordPage() {
       } else {
         setSuccess(true);
         setTimeout(() => {
-          router.push("/app/dashboard");
+          router.push("/dashboard");
         }, 2000);
       }
     } catch (error) {

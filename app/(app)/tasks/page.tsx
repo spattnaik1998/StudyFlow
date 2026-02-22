@@ -73,7 +73,7 @@ export default function TasksPage() {
             Add with AI
           </button>
           <Link
-            href="/app/tasks/new"
+            href="/tasks/new"
             className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
           >
             <Plus size={20} />

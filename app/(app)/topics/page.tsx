@@ -73,7 +73,7 @@ export default function TopicsPage() {
         </div>
 
         <Link
-          href="/app/topics/new"
+          href="/topics/new"
           className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
         >
           <Plus size={20} />
@@ -90,7 +90,7 @@ export default function TopicsPage() {
             </p>
             {dueTopics.length > 0 && (
               <Link
-                href={`/app/topics/${dueTopics[0].id}/review`}
+                href={`/topics/${dueTopics[0].id}/review`}
                 className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm font-medium"
               >
                 Start Review Session
@@ -141,7 +141,7 @@ export default function TopicsPage() {
           <p className="text-gray-600 mb-4">No topics found</p>
           {topics.length === 0 && (
             <Link
-              href="/app/topics/new"
+              href="/topics/new"
               className="inline-flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
             >
               <Plus size={20} />

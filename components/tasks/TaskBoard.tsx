@@ -152,7 +152,7 @@ export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
                     </span>
                     <div className="flex items-center gap-1">
                       <Link
-                        href={`/app/tasks/${task.id}/edit`}
+                        href={`/tasks/${task.id}/edit`}
                         className="p-1 hover:bg-gray-200 rounded transition opacity-0 group-hover:opacity-100"
                         title="Edit"
                       >

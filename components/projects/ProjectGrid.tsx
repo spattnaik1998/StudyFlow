@@ -17,7 +17,7 @@ export function ProjectGrid({ projects, onDelete, onEdit }: ProjectGridProps) {
       <div className="text-center py-12">
         <p className="text-gray-600 mb-6">No projects yet. Create your first course!</p>
         <Link
-          href="/app/projects/new"
+          href="/projects/new"
           className="inline-flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
         >
           <Plus size={20} />
@@ -36,7 +36,7 @@ export function ProjectGrid({ projects, onDelete, onEdit }: ProjectGridProps) {
         return (
           <Link
             key={project.id}
-            href={`/app/projects/${project.id}`}
+            href={`/projects/${project.id}`}
             className="group relative block h-64 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition"
           >
             {/* Background color */}
@@ -105,7 +105,7 @@ export function ProjectGrid({ projects, onDelete, onEdit }: ProjectGridProps) {
 
       {/* New project card */}
       <Link
-        href="/app/projects/new"
+        href="/projects/new"
         className="h-64 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center hover:border-indigo-600 hover:bg-indigo-50 transition"
       >
         <div className="text-center">

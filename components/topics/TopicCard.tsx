@@ -26,7 +26,7 @@ export function TopicCard({ topic }: TopicCardProps) {
       : `Every ${topic.sm2_interval} days`;
 
   return (
-    <Link href={`/app/topics/${topic.id}`}>
+    <Link href={`/topics/${topic.id}`}>
       <div className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition h-full flex flex-col cursor-pointer">
         {/* Header with project */}
         {project && (

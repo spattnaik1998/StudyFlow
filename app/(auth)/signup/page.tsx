@@ -55,7 +55,7 @@ export default function SignupPage() {
         // Auto-redirect after 2 seconds if email is auto-confirmed
         if (data?.user) {
           setTimeout(() => {
-            router.push("/app/dashboard");
+            router.push("/dashboard");
           }, 2000);
         }
       }
@@ -74,7 +74,7 @@ export default function SignupPage() {
       const { error: signInError } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/app/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
@@ -91,25 +91,25 @@ export default function SignupPage() {
   return (
     <div>
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Join StudyFlow</h1>
-        <p className="text-gray-600">Start your superhuman study journey</p>
+        <h1 className="text-4xl font-bold gradient-text mb-2">Join StudyFlow</h1>
+        <p className="text-zinc-400">Start your superhuman study journey</p>
       </div>
 
       {error && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+        <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-sm text-red-400">
           {error}
         </div>
       )}
 
       {message && (
-        <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
+        <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg text-sm text-green-400">
           {message}
         </div>
       )}
 
       <form onSubmit={handleSignup} className="space-y-4 mb-6">
         <div>
-          <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="fullname" className="block text-sm font-medium text-zinc-300 mb-1">
             Full Name
           </label>
           <input
@@ -118,13 +118,13 @@ export default function SignupPage() {
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             placeholder="John Doe"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-white/10 bg-white/5 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-zinc-300 mb-1">
             Email Address
           </label>
           <input
@@ -133,13 +133,13 @@ export default function SignupPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-white/10 bg-white/5 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="password" className="block text-sm font-medium text-zinc-300 mb-1">
             Password
           </label>
           <input
@@ -148,16 +148,16 @@ export default function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-white/10 bg-white/5 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             required
           />
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-zinc-500">
             Must be at least 8 characters
           </p>
         </div>
 
         <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-zinc-300 mb-1">
             Confirm Password
           </label>
           <input
@@ -166,7 +166,7 @@ export default function SignupPage() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-white/10 bg-white/5 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             required
           />
         </div>
@@ -174,7 +174,7 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2 px-4 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-2 px-4 bg-gradient-to-r from-indigo-500 to-violet-600 text-white rounded-lg font-medium shadow-lg shadow-indigo-500/25 hover:shadow-lg hover:shadow-indigo-500/40 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Creating account..." : "Create Account"}
         </button>
@@ -182,24 +182,24 @@ export default function SignupPage() {
 
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-300"></div>
+          <div className="w-full border-t border-white/10"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-gray-500">Or sign up with</span>
+          <span className="px-2 bg-popover text-zinc-500">Or sign up with</span>
         </div>
       </div>
 
       <button
         onClick={handleGoogleSignup}
         disabled={loading}
-        className="w-full py-2 px-4 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-2 px-4 border border-white/10 bg-white/5 rounded-lg font-medium text-white hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Google
       </button>
 
-      <p className="mt-6 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-zinc-400">
         Already have an account?{" "}
-        <Link href="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+        <Link href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium">
           Sign in
         </Link>
       </p>

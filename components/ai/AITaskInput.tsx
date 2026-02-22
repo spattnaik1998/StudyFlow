@@ -56,7 +56,7 @@ export function AITaskInput({ projectId }: AITaskInputProps) {
       });
 
       // Navigate to tasks/new with pre-filled data
-      router.push(`/app/tasks/new?${params.toString()}`);
+      router.push(`/tasks/new?${params.toString()}`);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to parse task";

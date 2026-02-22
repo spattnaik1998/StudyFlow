@@ -81,7 +81,7 @@ export function TaskList({ tasks, projects, onRefresh }: TaskListProps) {
       <div className="text-center py-12 bg-white rounded-lg shadow">
         <p className="text-gray-600 mb-4">No tasks yet</p>
         <Link
-          href="/app/tasks/new"
+          href="/tasks/new"
           className="inline-block px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
         >
           Create Task
@@ -155,7 +155,7 @@ export function TaskList({ tasks, projects, onRefresh }: TaskListProps) {
                 {hoveredTaskId === task.id && (
                   <div className="flex items-center justify-end gap-2">
                     <Link
-                      href={`/app/tasks/${task.id}/edit`}
+                      href={`/tasks/${task.id}/edit`}
                       className="p-1 hover:bg-gray-200 rounded transition"
                       title="Edit"
                     >

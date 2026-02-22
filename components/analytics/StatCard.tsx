@@ -48,14 +48,14 @@ export function StatCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white rounded-lg shadow p-6 border border-gray-100"
+      className="glass-subtle rounded-xl p-6 border border-white/5 hover:border-indigo-500/20"
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500 uppercase">{label}</p>
+          <p className="text-sm font-medium text-zinc-500 uppercase tracking-widest">{label}</p>
           <div className="flex items-baseline gap-2 mt-2">
-            <p className="text-3xl font-bold text-gray-900">{displayValue}</p>
-            {unit && <span className="text-sm text-gray-500">{unit}</span>}
+            <p className="text-3xl font-bold text-white">{displayValue}</p>
+            {unit && <span className="text-sm text-zinc-500">{unit}</span>}
           </div>
         </div>
         {icon && (

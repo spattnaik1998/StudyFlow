@@ -139,7 +139,7 @@ export default function ReviewSessionPage() {
   return (
     <div>
       <Link
-        href={`/app/topics/${topicId}`}
+        href={`/topics/${topicId}`}
         className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 mb-8 w-fit"
       >
         <ArrowLeft size={18} />
@@ -242,14 +242,14 @@ export default function ReviewSessionPage() {
 
               <div className="flex gap-3">
                 <Link
-                  href="/app/topics"
+                  href="/topics"
                   className="flex-1 px-6 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition font-medium text-center"
                 >
                   Back to Topics
                 </Link>
 
                 <Link
-                  href="/app/topics"
+                  href="/topics"
                   className="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium text-center"
                 >
                   Review Another Topic

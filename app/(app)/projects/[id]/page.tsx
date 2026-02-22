@@ -40,7 +40,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
-      window.location.href = "/app/projects";
+      window.location.href = "/projects";
     },
   });
 
@@ -56,7 +56,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     return (
       <div className="text-center py-12">
         <p className="text-gray-600 mb-4">Project not found</p>
-        <Link href="/app/projects" className="text-indigo-600 hover:underline">
+        <Link href="/projects" className="text-indigo-600 hover:underline">
           Back to projects
         </Link>
       </div>
@@ -69,7 +69,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
       <div className="mb-8 flex items-start justify-between">
         <div className="flex items-center gap-4">
           <Link
-            href="/app/projects"
+            href="/projects"
             className="p-2 hover:bg-gray-100 rounded-lg transition"
           >
             <ArrowLeft size={24} />
@@ -107,7 +107,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           {showActions && (
             <div className="absolute right-0 mt-10 w-48 bg-white rounded-lg shadow-lg z-10">
               <Link
-                href={`/app/projects/${project.id}/edit`}
+                href={`/projects/${project.id}/edit`}
                 className="block px-4 py-2 hover:bg-gray-50 transition flex items-center gap-2"
               >
                 <Edit2 size={16} />
@@ -171,7 +171,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-bold text-gray-900">Tasks</h2>
           <Link
-            href={`/app/tasks/new?project=${project.id}`}
+            href={`/tasks/new?project=${project.id}`}
             className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
           >
             <Plus size={20} />

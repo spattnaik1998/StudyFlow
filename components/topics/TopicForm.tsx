@@ -82,7 +82,7 @@ export function TopicForm({ topic, projectId, onSubmit }: TopicFormProps) {
       }
 
       onSubmit?.();
-      router.push("/app/topics");
+      router.push("/topics");
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {

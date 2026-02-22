@@ -22,14 +22,14 @@ export default function FocusPage() {
   useTimer();
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
+    <main className="min-h-screen py-8 px-4">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold gradient-text mb-2">
             Focus Session
           </h1>
-          <p className="text-gray-600">
+          <p className="text-zinc-400">
             Eliminate distractions, study smarter, master your goals
           </p>
         </div>
@@ -38,7 +38,7 @@ export default function FocusPage() {
         <div className="grid md:grid-cols-3 gap-8 mb-12">
           {/* Left: Timer */}
           <div className="md:col-span-2">
-            <div className="bg-white rounded-lg shadow-lg p-8">
+            <div className="glass rounded-xl p-8 shadow-2xl shadow-black/50">
               <FocusTimer />
             </div>
           </div>
@@ -50,7 +50,7 @@ export default function FocusPage() {
         </div>
 
         {/* Session History */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="glass-subtle rounded-xl p-6 border border-white/5">
           <SessionHistory />
         </div>
       </div>

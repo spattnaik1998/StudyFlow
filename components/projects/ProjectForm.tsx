@@ -57,7 +57,7 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
       }
 
       onSubmit?.();
-      router.push("/app/projects");
+      router.push("/projects");
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {

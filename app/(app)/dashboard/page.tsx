@@ -81,33 +81,42 @@ export default async function DashboardPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900">
-          Welcome back, {userName}! 🎉
+        <h1 className="text-4xl font-bold">
+          Welcome back, <span className="gradient-text">{userName}</span>! 🎉
         </h1>
-        <p className="text-gray-600 mt-2">Let's make today a productive day.</p>
+        <p className="text-zinc-400 mt-2">Let's make today a productive day.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Stats cards */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 uppercase">
+        <div className="glass-subtle rounded-xl border border-white/5 hover:border-indigo-500/20 p-6 transition">
+          <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-widest">
             Study Hours Today
           </h3>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{studyHoursToday}</p>
+          <div className="flex items-baseline gap-4 mt-2">
+            <p className="text-3xl font-bold text-white">{studyHoursToday}</p>
+            <div className="h-0.5 w-12 bg-gradient-to-r from-indigo-500 to-violet-500"></div>
+          </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 uppercase">
+        <div className="glass-subtle rounded-xl border border-white/5 hover:border-indigo-500/20 p-6 transition">
+          <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-widest">
             Tasks Completed
           </h3>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{tasksCompleted}</p>
+          <div className="flex items-baseline gap-4 mt-2">
+            <p className="text-3xl font-bold text-white">{tasksCompleted}</p>
+            <div className="h-0.5 w-12 bg-gradient-to-r from-indigo-500 to-violet-500"></div>
+          </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 uppercase">
+        <div className="glass-subtle rounded-xl border border-white/5 hover:border-indigo-500/20 p-6 transition">
+          <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-widest">
             Current Streak
           </h3>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{currentStreak}</p>
+          <div className="flex items-baseline gap-4 mt-2">
+            <p className="text-3xl font-bold text-white">{currentStreak}</p>
+            <div className="h-0.5 w-12 bg-gradient-to-r from-indigo-500 to-violet-500"></div>
+          </div>
         </div>
       </div>
 
@@ -115,9 +124,9 @@ export default async function DashboardPage() {
         <DailyBrief />
       </div>
 
-      <div className="mt-8 bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Getting Started</h2>
-        <ul className="space-y-3 text-gray-600">
+      <div className="mt-8 glass-subtle rounded-xl border border-white/5 p-6">
+        <h2 className="text-xl font-bold text-white mb-4">Getting Started</h2>
+        <ul className="space-y-3 text-zinc-400">
           <li>✓ Create your first project (course/subject)</li>
           <li>✓ Add tasks to your project</li>
           <li>✓ Start a focus session with Pomodoro timer</li>

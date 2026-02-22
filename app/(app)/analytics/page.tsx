@@ -18,7 +18,7 @@ export default async function AnalyticsPage() {
   if (!session) {
     return (
       <div className="p-6 text-center">
-        <p className="text-gray-600">Please log in to view analytics</p>
+        <p className="text-zinc-400">Please log in to view analytics</p>
       </div>
     );
   }
@@ -165,8 +165,8 @@ export default async function AnalyticsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-bold text-gray-900">Analytics</h1>
-        <p className="text-gray-600 mt-2">Track your study progress and performance</p>
+        <h1 className="text-4xl font-bold text-white">Analytics</h1>
+        <p className="text-zinc-400 mt-2">Track your study progress and performance</p>
       </div>
 
       {/* Summary Stats */}
@@ -202,8 +202,8 @@ export default async function AnalyticsPage() {
       </div>
 
       {/* Study Hours Chart */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Study Hours</h2>
+      <div className="glass-subtle rounded-xl border border-white/5 p-6">
+        <h2 className="text-xl font-bold text-white mb-4">Study Hours</h2>
         <Tabs defaultValue="30d" className="w-full">
           <TabsList className="grid w-full max-w-md grid-cols-3">
             <TabsTrigger value="7d">7 Days</TabsTrigger>
@@ -233,18 +233,18 @@ export default async function AnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Task Completion */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Task Completion by Priority</h2>
+        <div className="glass-subtle rounded-xl border border-white/5 p-6">
+          <h2 className="text-xl font-bold text-white mb-4">Task Completion by Priority</h2>
           <TaskCompletionChart data={taskCompletionData} />
         </div>
 
         {/* Mastery Radar */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Topic Mastery</h2>
+        <div className="glass-subtle rounded-xl border border-white/5 p-6">
+          <h2 className="text-xl font-bold text-white mb-4">Topic Mastery</h2>
           {masteryData.length > 0 ? (
             <MasteryRadar data={masteryData} />
           ) : (
-            <div className="flex items-center justify-center h-[300px] text-gray-500">
+            <div className="flex items-center justify-center h-[300px] text-zinc-500">
               <p>No topics created yet</p>
             </div>
           )}
@@ -252,8 +252,8 @@ export default async function AnalyticsPage() {
       </div>
 
       {/* Activity Heatmap */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Activity Heatmap (90 Days)</h2>
+      <div className="glass-subtle rounded-xl border border-white/5 p-6">
+        <h2 className="text-xl font-bold text-white mb-4">Activity Heatmap (90 Days)</h2>
         <ActivityHeatmap data={activityByDate} streak={streak} />
       </div>
     </div>

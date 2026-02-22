@@ -39,7 +39,7 @@ export default function EditTopicPage() {
     <div>
       <div className="mb-8">
         <Link
-          href={`/app/topics/${topicId}`}
+          href={`/topics/${topicId}`}
           className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 mb-4 w-fit"
         >
           <ArrowLeft size={18} />

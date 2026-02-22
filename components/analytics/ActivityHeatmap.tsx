@@ -9,11 +9,11 @@ interface ActivityHeatmapProps {
 }
 
 const getColor = (minutes: number): string => {
-  if (minutes === 0) return "bg-gray-100";
-  if (minutes < 30) return "bg-green-100";
-  if (minutes < 90) return "bg-green-300";
-  if (minutes < 180) return "bg-green-500";
-  return "bg-green-700";
+  if (minutes === 0) return "bg-white/5";
+  if (minutes < 30) return "bg-green-900/40";
+  if (minutes < 90) return "bg-green-800/60";
+  if (minutes < 180) return "bg-green-700/80";
+  return "bg-green-600";
 };
 
 const getHexColor = (minutes: number): string => {
@@ -65,8 +65,8 @@ export function ActivityHeatmap({ data, streak = 0 }: ActivityHeatmapProps) {
     <div className="space-y-4">
       {/* Streak badge */}
       {streak > 0 && (
-        <div className="inline-block bg-orange-100 border border-orange-300 rounded-full px-4 py-2">
-          <span className="text-sm font-semibold text-orange-700">
+        <div className="inline-block bg-orange-500/15 border border-orange-500/30 rounded-full px-4 py-2">
+          <span className="text-sm font-semibold text-orange-300">
             🔥 {streak}-day streak
           </span>
         </div>
@@ -77,15 +77,15 @@ export function ActivityHeatmap({ data, streak = 0 }: ActivityHeatmapProps) {
         <div className="inline-block">
           {/* Legend */}
           <div className="flex items-center gap-2 mb-4 text-xs">
-            <span className="text-gray-600">Less</span>
+            <span className="text-zinc-500">Less</span>
             <div className="flex gap-1">
               {[0, 1, 2, 3, 4].map((i) => {
                 const colors = [
-                  "#f3f4f6",
-                  "#bbf7d0",
-                  "#6ee7b7",
-                  "#10b981",
-                  "#047857",
+                  "rgba(255,255,255,0.05)",
+                  "#1b4332",
+                  "#2d6a4f",
+                  "#40916c",
+                  "#52b788",
                 ];
                 return (
                   <div
@@ -96,7 +96,7 @@ export function ActivityHeatmap({ data, streak = 0 }: ActivityHeatmapProps) {
                 );
               })}
             </div>
-            <span className="text-gray-600">More</span>
+            <span className="text-zinc-500">More</span>
           </div>
 
           {/* Grid */}
@@ -113,11 +113,11 @@ export function ActivityHeatmap({ data, streak = 0 }: ActivityHeatmapProps) {
                       <div
                         key={dateStr}
                         className={`w-3 h-3 rounded-sm cursor-pointer transition-all ${
-                          getColor(minutes) || "bg-gray-100"
+                          getColor(minutes) || "bg-white/5"
                         } ${
                           isToday
-                            ? "ring-2 ring-blue-500 ring-offset-1"
-                            : "hover:ring-2 hover:ring-gray-300 hover:ring-offset-1"
+                            ? "ring-2 ring-indigo-500 ring-offset-1 ring-offset-background"
+                            : "hover:ring-2 hover:ring-white/20 hover:ring-offset-1 hover:ring-offset-background"
                         }`}
                         style={{ backgroundColor: getHexColor(minutes) }}
                         onMouseEnter={(e) => handleCellHover(dateStr, e)}
@@ -133,7 +133,7 @@ export function ActivityHeatmap({ data, streak = 0 }: ActivityHeatmapProps) {
             {/* Tooltip */}
             {hoveredDate && tooltipPos && (
               <div
-                className="fixed bg-gray-900 text-white text-xs rounded px-2 py-1 whitespace-nowrap pointer-events-none z-50"
+                className="fixed bg-background text-white text-xs rounded px-2 py-1 whitespace-nowrap pointer-events-none z-50 border border-white/10 shadow-lg"
                 style={{
                   left: tooltipPos.x,
                   top: tooltipPos.y,
