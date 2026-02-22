@@ -70,13 +70,13 @@ export default function SettingsPage() {
           .eq("user_id", user.id)
           .single();
 
-        setProfile(
-          profileData || {
-            full_name: user.user_metadata?.full_name || "",
-            email: user.email || "",
-            avatar_url: undefined,
-          }
-        );
+        // Always merge email from auth user since profiles table has no email column
+        setProfile({
+          full_name: profileData?.full_name || user.user_metadata?.full_name || "",
+          email: user.email || "",
+          avatar_url: profileData?.avatar_url,
+        });
+
         setPreferences(
           prefData || {
             work_duration_mins: 25,
@@ -109,10 +109,10 @@ export default function SettingsPage() {
       } = await supabase.auth.getUser();
       if (!user) return;
 
+      // Use upsert so it works even if the profile row doesn't exist yet
       const { error } = await supabase
         .from("profiles")
-        .update({ full_name: profile.full_name })
-        .eq("id", user.id);
+        .upsert({ id: user.id, full_name: profile.full_name }, { onConflict: "id" });
 
       if (!error) {
         queryClient.invalidateQueries({ queryKey: ["profile"] });
@@ -163,7 +163,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p className="text-gray-600">Loading settings...</p>
+        <p className="text-gray-400">Loading settings...</p>
       </div>
     );
   }
@@ -171,8 +171,8 @@ export default function SettingsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-2">Configure your StudyFlow preferences</p>
+        <h1 className="text-4xl font-bold text-white">Settings</h1>
+        <p className="text-zinc-400 mt-2">Configure your StudyFlow preferences</p>
       </div>
 
       <Tabs defaultValue="profile" className="w-full">
@@ -188,7 +188,7 @@ export default function SettingsPage() {
           <Card className="p-6 max-w-2xl">
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <h3 className="text-lg font-semibold text-white mb-4">
                   Profile Information
                 </h3>
               </div>
@@ -197,13 +197,13 @@ export default function SettingsPage() {
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16">
                   <AvatarImage src={profile?.avatar_url || ""} />
-                  <AvatarFallback className="bg-indigo-100 text-indigo-700 font-bold">
+                  <AvatarFallback className="bg-indigo-900/50 text-indigo-300 font-bold">
                     {profile?.full_name?.[0]?.toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="text-sm text-gray-600">Profile Avatar</p>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-sm text-gray-400">Profile Avatar</p>
+                  <p className="text-xs text-gray-500 mt-1">
                     Avatar upload coming soon
                   </p>
                 </div>
@@ -211,14 +211,14 @@ export default function SettingsPage() {
 
               {/* Display Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Display Name
                 </label>
                 <Input
                   type="text"
                   placeholder="Your name"
                   value={profile?.full_name || ""}
-                  className="border-white/20 bg-white/5"
+                  className="border-white/20 bg-white/5 text-gray-100"
                   onChange={(e) =>
                     setProfile(
                       profile ? { ...profile, full_name: e.target.value } : null
@@ -229,14 +229,14 @@ export default function SettingsPage() {
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Email
                 </label>
                 <Input
                   type="email"
                   value={profile?.email || ""}
                   disabled
-                  className="bg-gray-50"
+                  className="bg-white/5 text-gray-400"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Email cannot be changed from this page
@@ -260,7 +260,7 @@ export default function SettingsPage() {
           <Card className="p-6 max-w-2xl">
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <h3 className="text-lg font-semibold text-white mb-4">
                   Pomodoro Settings
                 </h3>
               </div>
@@ -268,10 +268,10 @@ export default function SettingsPage() {
               {/* Work Duration */}
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-gray-300">
                     Work Duration
                   </label>
-                  <span className="text-lg font-semibold text-indigo-600">
+                  <span className="text-lg font-semibold text-indigo-400">
                     {preferences?.work_duration_mins} min
                   </span>
                 </div>
@@ -293,10 +293,10 @@ export default function SettingsPage() {
               {/* Short Break */}
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-gray-300">
                     Short Break
                   </label>
-                  <span className="text-lg font-semibold text-green-600">
+                  <span className="text-lg font-semibold text-green-400">
                     {preferences?.short_break_mins} min
                   </span>
                 </div>
@@ -318,10 +318,10 @@ export default function SettingsPage() {
               {/* Long Break */}
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-gray-300">
                     Long Break
                   </label>
-                  <span className="text-lg font-semibold text-purple-600">
+                  <span className="text-lg font-semibold text-purple-400">
                     {preferences?.long_break_mins} min
                   </span>
                 </div>
@@ -342,7 +342,7 @@ export default function SettingsPage() {
 
               {/* Sessions Before Long Break */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Sessions Before Long Break
                 </label>
                 <Select
@@ -374,7 +374,7 @@ export default function SettingsPage() {
               </div>
 
               {/* Auto-start Breaks */}
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
                 <input
                   type="checkbox"
                   id="autoStartBreaks"
@@ -390,7 +390,7 @@ export default function SettingsPage() {
                 />
                 <label
                   htmlFor="autoStartBreaks"
-                  className="text-sm font-medium text-gray-700 cursor-pointer"
+                  className="text-sm font-medium text-gray-300 cursor-pointer"
                 >
                   Automatically start breaks
                 </label>
@@ -408,14 +408,14 @@ export default function SettingsPage() {
           <Card className="p-6 max-w-2xl">
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <h3 className="text-lg font-semibold text-white mb-4">
                   Preferences
                 </h3>
               </div>
 
               {/* Energy Pattern */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Energy Pattern
                 </label>
                 <Select
@@ -449,7 +449,7 @@ export default function SettingsPage() {
 
               {/* Work Hours Start */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Work Hours Start
                 </label>
                 <Input
@@ -467,7 +467,7 @@ export default function SettingsPage() {
 
               {/* Work Hours End */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Work Hours End
                 </label>
                 <Input
@@ -485,7 +485,7 @@ export default function SettingsPage() {
 
               {/* Theme */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Theme
                 </label>
                 <Select
@@ -524,29 +524,29 @@ export default function SettingsPage() {
           <Card className="p-6 max-w-2xl">
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <h3 className="text-lg font-semibold text-white mb-4">
                   Account Management
                 </h3>
               </div>
 
               {/* Change Password */}
-              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <h4 className="font-medium text-blue-900 mb-2">
+              <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-500/30">
+                <h4 className="font-medium text-blue-300 mb-2">
                   Change Password
                 </h4>
-                <p className="text-sm text-blue-800 mb-3">
+                <p className="text-sm text-blue-400 mb-3">
                   To change your password, you&apos;ll receive an email with reset
                   instructions
                 </p>
-                <Button variant="outline" className="bg-white">
+                <Button variant="outline">
                   Send Reset Email
                 </Button>
               </div>
 
               {/* Logout */}
-              <div className="pt-4 border-t">
-                <h4 className="font-medium text-gray-900 mb-3">Sign Out</h4>
-                <p className="text-sm text-gray-600 mb-4">
+              <div className="pt-4 border-t border-white/10">
+                <h4 className="font-medium text-white mb-3">Sign Out</h4>
+                <p className="text-sm text-gray-400 mb-4">
                   Sign out from all devices and clear your session
                 </p>
                 <Button

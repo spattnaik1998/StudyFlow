@@ -93,24 +93,24 @@ export function TopicForm({ topic, projectId, onSubmit }: TopicFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+        <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
           {error}
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Project *
         </label>
         <select
           required
           value={formData.project_id}
           onChange={(e) => setFormData({ ...formData, project_id: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          <option value="">Select a project</option>
+          <option value="" className="bg-zinc-900">Select a project</option>
           {projects.map((p) => (
-            <option key={p.id} value={p.id}>
+            <option key={p.id} value={p.id} className="bg-zinc-900">
               {p.name}
             </option>
           ))}
@@ -118,7 +118,7 @@ export function TopicForm({ topic, projectId, onSubmit }: TopicFormProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Topic Name *
         </label>
         <input
@@ -127,12 +127,12 @@ export function TopicForm({ topic, projectId, onSubmit }: TopicFormProps) {
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           placeholder="e.g., Photosynthesis"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-gray-500"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Description
         </label>
         <textarea
@@ -140,12 +140,12 @@ export function TopicForm({ topic, projectId, onSubmit }: TopicFormProps) {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           placeholder="Notes about what you need to know for this topic"
           rows={3}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-gray-500"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Initial Mastery Level
         </label>
         <select
@@ -153,10 +153,10 @@ export function TopicForm({ topic, projectId, onSubmit }: TopicFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, mastery_level: e.target.value as any })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           {masteryLevels.map((level) => (
-            <option key={level.value} value={level.value}>
+            <option key={level.value} value={level.value} className="bg-zinc-900">
               {level.label}
             </option>
           ))}
@@ -167,7 +167,7 @@ export function TopicForm({ topic, projectId, onSubmit }: TopicFormProps) {
         <button
           type="button"
           onClick={() => router.back()}
-          className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+          className="flex-1 px-4 py-2 border border-white/20 text-gray-300 rounded-lg hover:bg-white/10 transition"
         >
           Cancel
         </button>

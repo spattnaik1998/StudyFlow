@@ -133,24 +133,24 @@ export function BlockForm({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto"
+        className="bg-[#12121e] border border-white/10 rounded-lg shadow-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-white">
             {block ? "Edit Block" : "New Schedule Block"}
           </h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded-lg transition"
+            className="p-1 hover:bg-white/10 rounded-lg transition"
           >
-            <X size={24} />
+            <X size={24} className="text-gray-400" />
           </button>
         </div>
 
         {error && (
-          <div className="p-4 mb-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          <div className="p-4 mb-4 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
             {error}
           </div>
         )}
@@ -158,7 +158,7 @@ export function BlockForm({
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Title *
             </label>
             <input
@@ -169,13 +169,13 @@ export function BlockForm({
                 setFormData({ ...formData, title: e.target.value })
               }
               placeholder="e.g., Chemistry Lecture"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-gray-500"
             />
           </div>
 
           {/* Block type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Type *
             </label>
             <select
@@ -186,19 +186,19 @@ export function BlockForm({
                   block_type: e.target.value as any,
                 })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="study">Study Session</option>
-              <option value="class">Class</option>
-              <option value="exam">Exam</option>
-              <option value="break">Break</option>
-              <option value="blocked">Blocked Time</option>
+              <option value="study" className="bg-zinc-900">Study Session</option>
+              <option value="class" className="bg-zinc-900">Class</option>
+              <option value="exam" className="bg-zinc-900">Exam</option>
+              <option value="break" className="bg-zinc-900">Break</option>
+              <option value="blocked" className="bg-zinc-900">Blocked Time</option>
             </select>
           </div>
 
           {/* Start time */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Start Time *
             </label>
             <input
@@ -208,13 +208,13 @@ export function BlockForm({
               onChange={(e) =>
                 setFormData({ ...formData, start_time: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
           {/* End time */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               End Time *
             </label>
             <input
@@ -224,13 +224,13 @@ export function BlockForm({
               onChange={(e) =>
                 setFormData({ ...formData, end_time: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
           {/* Color picker */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-medium text-gray-300 mb-3">
               Color
             </label>
             <div className="flex flex-wrap gap-3">
@@ -243,7 +243,7 @@ export function BlockForm({
                   }
                   className={`w-8 h-8 rounded-full transition ${
                     formData.color === option.hex
-                      ? "ring-2 ring-offset-2 ring-gray-400"
+                      ? "ring-2 ring-offset-2 ring-white/40"
                       : ""
                   }`}
                   style={{ backgroundColor: option.hex }}
@@ -256,7 +256,7 @@ export function BlockForm({
                 onChange={(e) =>
                   setFormData({ ...formData, color: e.target.value })
                 }
-                className="w-8 h-8 rounded-full cursor-pointer border border-gray-300"
+                className="w-8 h-8 rounded-full cursor-pointer border border-white/20"
                 title="Custom color"
               />
             </div>
@@ -264,7 +264,7 @@ export function BlockForm({
 
           {/* Project */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Project
             </label>
             <select
@@ -272,11 +272,11 @@ export function BlockForm({
               onChange={(e) =>
                 setFormData({ ...formData, project_id: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-white/20 bg-white/5 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="">None</option>
+              <option value="" className="bg-zinc-900">None</option>
               {projects.map((p) => (
-                <option key={p.id} value={p.id}>
+                <option key={p.id} value={p.id} className="bg-zinc-900">
                   {p.name}
                 </option>
               ))}
@@ -290,7 +290,7 @@ export function BlockForm({
                 type="button"
                 onClick={handleDeleteClick}
                 disabled={deleteLoading}
-                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 text-red-400 hover:bg-red-900/20 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Trash2 size={20} />
               </button>
@@ -299,7 +299,7 @@ export function BlockForm({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
+              className="flex-1 px-4 py-2 border border-white/20 text-gray-300 rounded-lg hover:bg-white/10 transition font-medium"
             >
               Cancel
             </button>
