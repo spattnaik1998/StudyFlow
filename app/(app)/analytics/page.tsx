@@ -25,16 +25,45 @@ export default async function AnalyticsPage() {
 
   const userId = session.user.id;
 
-  // === Study Hours Data ===
+  // === Parallelize all queries ===
   const thirtyDaysAgo = subDays(new Date(), 30);
   thirtyDaysAgo.setHours(0, 0, 0, 0);
+  const ninetyDaysAgo = subDays(new Date(), 90);
+  ninetyDaysAgo.setHours(0, 0, 0, 0);
+  const fourWeeksAgo = subDays(new Date(), 28);
+  fourWeeksAgo.setHours(0, 0, 0, 0);
 
-  const { data: sessionsLast30 } = await supabase
-    .from("task_sessions")
-    .select("started_at, actual_duration_minutes")
-    .eq("user_id", userId)
-    .gte("started_at", thirtyDaysAgo.toISOString());
+  const [sessionsLast30Res, completedTasksRes, topicsRes, allSessionsRes] = await Promise.all([
+    supabase
+      .from("task_sessions")
+      .select("started_at, actual_duration_minutes")
+      .eq("user_id", userId)
+      .gte("started_at", thirtyDaysAgo.toISOString()),
+    supabase
+      .from("tasks")
+      .select("completed_at, priority")
+      .eq("user_id", userId)
+      .eq("status", "done")
+      .gte("completed_at", fourWeeksAgo.toISOString()),
+    supabase
+      .from("topics")
+      .select("title, mastery_level")
+      .eq("user_id", userId)
+      .order("mastery_level", { ascending: false })
+      .limit(6),
+    supabase
+      .from("task_sessions")
+      .select("started_at, actual_duration_minutes")
+      .eq("user_id", userId)
+      .gte("started_at", ninetyDaysAgo.toISOString()),
+  ]);
 
+  const sessionsLast30 = sessionsLast30Res.data;
+  const completedTasks = completedTasksRes.data;
+  const topics = topicsRes.data;
+  const allSessions = allSessionsRes.data;
+
+  // === Study Hours Data (30 days) ===
   const studyHoursByDay: Record<string, number> = {};
   sessionsLast30?.forEach((session) => {
     const date = format(new Date(session.started_at), "MMM dd");
@@ -51,17 +80,24 @@ export default async function AnalyticsPage() {
     };
   });
 
+  // === Study Hours Data (90 days) ===
+  const studyHoursByDay90: Record<string, number> = {};
+  allSessions?.forEach((session) => {
+    const date = format(new Date(session.started_at), "MMM dd");
+    const minutes = session.actual_duration_minutes || 0;
+    studyHoursByDay90[date] = (studyHoursByDay90[date] || 0) + minutes / 60;
+  });
+
+  const studyHoursData90 = Array.from({ length: 90 }, (_, i) => {
+    const day = subDays(new Date(), 89 - i);
+    const dateStr = format(day, "MMM dd");
+    return {
+      date: dateStr,
+      hours: parseFloat((studyHoursByDay90[dateStr] || 0).toFixed(2)),
+    };
+  });
+
   // === Task Completion Data ===
-  const fourWeeksAgo = subDays(new Date(), 28);
-  fourWeeksAgo.setHours(0, 0, 0, 0);
-
-  const { data: completedTasks } = await supabase
-    .from("tasks")
-    .select("completed_at, priority")
-    .eq("user_id", userId)
-    .eq("status", "done")
-    .gte("completed_at", fourWeeksAgo.toISOString());
-
   const tasksByWeek: Record<string, Record<string, number>> = {};
   completedTasks?.forEach((task) => {
     const weekStart = startOfWeek(new Date(task.completed_at));
@@ -90,13 +126,6 @@ export default async function AnalyticsPage() {
   });
 
   // === Mastery by Topic ===
-  const { data: topics } = await supabase
-    .from("topics")
-    .select("title, mastery_level")
-    .eq("user_id", userId)
-    .order("mastery_level", { ascending: false })
-    .limit(6);
-
   const masteryLevelMap: Record<string, number> = {
     not_started: 0,
     learning: 25,
@@ -109,16 +138,6 @@ export default async function AnalyticsPage() {
     name: topic.title.substring(0, 15),
     mastery: masteryLevelMap[topic.mastery_level] || 0,
   }));
-
-  // === Activity Heatmap (90 days) ===
-  const ninetyDaysAgo = subDays(new Date(), 90);
-  ninetyDaysAgo.setHours(0, 0, 0, 0);
-
-  const { data: allSessions } = await supabase
-    .from("task_sessions")
-    .select("started_at, actual_duration_minutes")
-    .eq("user_id", userId)
-    .gte("started_at", ninetyDaysAgo.toISOString());
 
   const activityByDate: Record<string, number> = {};
   allSessions?.forEach((session) => {
@@ -225,7 +244,7 @@ export default async function AnalyticsPage() {
 
           <TabsContent value="90d" className="mt-4">
             <StudyHoursChart
-              data={studyHoursData}
+              data={studyHoursData90}
             />
           </TabsContent>
         </Tabs>

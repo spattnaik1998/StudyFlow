@@ -5,6 +5,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createServerClient_();
+
+    // Get authenticated user
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body: GenerateStudyPlanRequest = await request.json();
     const { project_id, exam_date, chapters, total_study_hours } = body;
 
@@ -16,7 +27,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch project from Supabase
-    const supabase = await createServerClient_();
     const { data: project, error: projectError } = await supabase
       .from("projects")
       .select("name")

@@ -14,40 +14,44 @@ export default async function DashboardPage() {
   let currentStreak = 0;
 
   if (session) {
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", session.user.id)
-      .single();
-    profile = data;
-
-    // Study hours today
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const { data: sessions } = await supabase
-      .from("task_sessions")
-      .select("actual_duration_minutes")
-      .eq("user_id", session.user.id)
-      .gte("started_at", today.toISOString());
+
+    // Parallelize all queries
+    const [profileRes, sessionsRes, completedTasksRes, allSessionsRes] = await Promise.all([
+      supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single(),
+      supabase
+        .from("task_sessions")
+        .select("actual_duration_minutes")
+        .eq("user_id", session.user.id)
+        .gte("started_at", today.toISOString()),
+      supabase
+        .from("tasks")
+        .select("id")
+        .eq("user_id", session.user.id)
+        .eq("status", "done")
+        .gte("completed_at", today.toISOString()),
+      supabase
+        .from("task_sessions")
+        .select("started_at")
+        .eq("user_id", session.user.id)
+        .order("started_at", { ascending: false }),
+    ]);
+
+    profile = profileRes.data;
+    const sessions = sessionsRes.data;
+    const completedTasks = completedTasksRes.data;
+    const allSessions = allSessionsRes.data;
+
     studyHoursToday = Math.round(
       (sessions?.reduce((sum, s) => sum + (s.actual_duration_minutes || 0), 0) || 0) / 60
     );
 
-    // Tasks completed today
-    const { data: completedTasks } = await supabase
-      .from("tasks")
-      .select("id")
-      .eq("user_id", session.user.id)
-      .eq("status", "done")
-      .gte("completed_at", today.toISOString());
     tasksCompleted = completedTasks?.length || 0;
-
-    // Current streak (consecutive days with focus sessions)
-    const { data: allSessions } = await supabase
-      .from("task_sessions")
-      .select("started_at")
-      .eq("user_id", session.user.id)
-      .order("started_at", { ascending: false });
 
     if (allSessions && allSessions.length > 0) {
       const sessionDates = new Set<string>();

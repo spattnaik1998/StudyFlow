@@ -1,15 +1,14 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { CommandPalette } from "@/components/layout/CommandPalette";
 import { useCommandPalette } from "@/hooks/useCommandPalette";
 import { useUIStore } from "@/stores/useUIStore";
 
-const queryClient = new QueryClient();
-
 export function AppLayoutClient({ children }: { children: ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient());
   const { sidebarOpen } = useUIStore();
   useCommandPalette();
 

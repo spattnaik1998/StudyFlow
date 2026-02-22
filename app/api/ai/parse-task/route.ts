@@ -1,9 +1,21 @@
 import { openai } from "@/lib/openai";
+import { createServerClient_ } from "@/lib/supabase/server";
 import { ParseNLTaskRequest } from "@/types/api";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createServerClient_();
+
+    // Get authenticated user
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body: ParseNLTaskRequest = await request.json();
     const { input, project_id } = body;
 
