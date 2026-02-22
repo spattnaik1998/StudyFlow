@@ -80,7 +80,7 @@ export default async function DashboardPage() {
     }
   }
 
-  const userName = profile?.full_name || session?.user?.email || "Student";
+  const userName = profile?.full_name?.trim() || session?.user?.email || "Student";
 
   return (
     <div>

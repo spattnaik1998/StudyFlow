@@ -25,7 +25,7 @@ export default function EditTaskPage({ params }: { params: { id: string } }) {
   if (isLoading) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">Loading task...</p>
+        <p className="text-zinc-400">Loading task...</p>
       </div>
     );
   }
@@ -33,7 +33,7 @@ export default function EditTaskPage({ params }: { params: { id: string } }) {
   if (!task) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">Task not found</p>
+        <p className="text-zinc-400">Task not found</p>
       </div>
     );
   }
@@ -41,11 +41,11 @@ export default function EditTaskPage({ params }: { params: { id: string } }) {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Edit Task</h1>
-        <p className="text-gray-600 mt-2">Update task details</p>
+        <h1 className="text-3xl font-bold text-white">Edit Task</h1>
+        <p className="text-zinc-400 mt-2">Update task details</p>
       </div>
 
-      <div className="max-w-2xl bg-white rounded-lg shadow p-8">
+      <div className="max-w-2xl bg-zinc-900 rounded-xl border border-white/10 p-8">
         <TaskForm task={task} />
       </div>
     </div>

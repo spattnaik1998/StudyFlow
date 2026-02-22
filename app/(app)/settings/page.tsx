@@ -47,6 +47,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,6 +104,7 @@ export default function SettingsPage() {
   const handleProfileSave = async () => {
     if (!profile) return;
     setSaving(true);
+    setSaveError(null);
     try {
       const {
         data: { user },
@@ -114,14 +116,16 @@ export default function SettingsPage() {
         .from("profiles")
         .upsert({ id: user.id, full_name: profile.full_name }, { onConflict: "id" });
 
-      if (!error) {
+      if (error) {
+        setSaveError(error.message);
+      } else {
         queryClient.invalidateQueries({ queryKey: ["profile"] });
         router.refresh();
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);
       }
     } catch (error) {
-      console.error("Error saving profile:", error);
+      setSaveError(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setSaving(false);
     }
@@ -243,6 +247,9 @@ export default function SettingsPage() {
                 </p>
               </div>
 
+              {saveError && (
+                <p className="text-sm text-red-400">{saveError}</p>
+              )}
               <div className="flex items-center gap-3">
                 <Button onClick={handleProfileSave} disabled={saving}>
                   {saving ? "Saving..." : "Save Changes"}

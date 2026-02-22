@@ -78,9 +78,12 @@ export function TaskForm({ task, projectId, onSubmit }: TaskFormProps) {
 
         if (updateError) throw updateError;
       } else {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) throw new Error("Please log in to create tasks");
+
         const { error: insertError } = await supabase
           .from("tasks")
-          .insert([submitData]);
+          .insert([{ ...submitData, user_id: session.user.id }]);
 
         if (insertError) throw insertError;
       }

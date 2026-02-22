@@ -28,11 +28,11 @@ export default function EditTopicPage() {
   });
 
   if (isLoading) {
-    return <div className="text-center py-12 text-gray-600">Loading topic...</div>;
+    return <div className="text-center py-12 text-zinc-400">Loading topic...</div>;
   }
 
   if (!topic) {
-    return <div className="text-center py-12 text-gray-600">Topic not found</div>;
+    return <div className="text-center py-12 text-zinc-400">Topic not found</div>;
   }
 
   return (
@@ -40,17 +40,17 @@ export default function EditTopicPage() {
       <div className="mb-8">
         <Link
           href={`/topics/${topicId}`}
-          className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 mb-4 w-fit"
+          className="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 mb-4 w-fit"
         >
           <ArrowLeft size={18} />
           Back to topic
         </Link>
 
-        <h1 className="text-3xl font-bold text-gray-900">Edit Topic</h1>
-        <p className="text-gray-600 mt-2">Update topic details</p>
+        <h1 className="text-3xl font-bold text-white">Edit Topic</h1>
+        <p className="text-zinc-400 mt-2">Update topic details</p>
       </div>
 
-      <div className="max-w-2xl bg-white rounded-lg shadow p-8">
+      <div className="max-w-2xl bg-zinc-900 rounded-xl border border-white/10 p-8">
         <TopicForm topic={topic} />
       </div>
     </div>
