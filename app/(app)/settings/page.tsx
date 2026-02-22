@@ -92,7 +92,7 @@ export default function SettingsPage() {
     };
 
     fetchData();
-  }, [supabase]);
+  }, []);
 
   const handleProfileSave = async () => {
     if (!profile) return;
