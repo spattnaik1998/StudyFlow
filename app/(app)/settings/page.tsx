@@ -70,7 +70,13 @@ export default function SettingsPage() {
           .eq("user_id", user.id)
           .single();
 
-        setProfile(profileData);
+        setProfile(
+          profileData || {
+            full_name: user.user_metadata?.full_name || "",
+            email: user.email || "",
+            avatar_url: undefined,
+          }
+        );
         setPreferences(
           prefData || {
             work_duration_mins: 25,

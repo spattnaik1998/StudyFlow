@@ -49,9 +49,14 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
         if (updateError) throw updateError;
       } else {
         // Create new project
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) throw new Error("Not authenticated");
+
         const { error: insertError } = await supabase
           .from("projects")
-          .insert([formData]);
+          .insert([{ ...formData, user_id: user.id }]);
 
         if (insertError) throw insertError;
       }
@@ -68,13 +73,13 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+        <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
           {error}
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Project Name *
         </label>
         <input
@@ -83,12 +88,12 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           placeholder="e.g., Biology 101"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-4 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100 bg-white/5"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Description
         </label>
         <textarea
@@ -96,13 +101,13 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           placeholder="Optional description"
           rows={3}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-4 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100 bg-white/5"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-300 mb-2">
             Color
           </label>
           <div className="flex flex-wrap gap-2">
@@ -124,7 +129,7 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-300 mb-2">
             Emoji
           </label>
           <div className="grid grid-cols-6 gap-1">
@@ -136,7 +141,7 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
                 className={`p-2 rounded-lg text-lg transition ${
                   formData.emoji === emoji
                     ? "bg-indigo-100 border-2 border-indigo-600"
-                    : "hover:bg-gray-100"
+                    : "hover:bg-white/10"
                 }`}
               >
                 {emoji}
@@ -148,7 +153,7 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-300 mb-2">
             Course Code
           </label>
           <input
@@ -156,12 +161,12 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
             value={formData.course_code}
             onChange={(e) => setFormData({ ...formData, course_code: e.target.value })}
             placeholder="e.g., BIO-101"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100 bg-white/5"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-300 mb-2">
             Instructor
           </label>
           <input
@@ -169,14 +174,14 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
             value={formData.instructor}
             onChange={(e) => setFormData({ ...formData, instructor: e.target.value })}
             placeholder="e.g., Dr. Smith"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100 bg-white/5"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-300 mb-2">
             Credit Hours
           </label>
           <input
@@ -186,19 +191,19 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, credit_hours: parseFloat(e.target.value) })
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100 bg-white/5"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-300 mb-2">
             Exam Date
           </label>
           <input
             type="date"
             value={formData.exam_date}
             onChange={(e) => setFormData({ ...formData, exam_date: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100 bg-white/5"
           />
         </div>
       </div>
@@ -207,7 +212,7 @@ export function ProjectForm({ project, onSubmit }: ProjectFormProps) {
         <button
           type="button"
           onClick={() => router.back()}
-          className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+          className="flex-1 px-4 py-2 border border-white/20 text-gray-300 rounded-lg hover:bg-white/10 transition"
         >
           Cancel
         </button>
