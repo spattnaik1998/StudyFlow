@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Sparkles, X, Check } from "lucide-react";
+import { showSuccess, showError } from "@/lib/toast";
 import type { Project } from "@/types/database";
 
 interface StudyBlock {
@@ -76,6 +77,9 @@ export function StudyPlanModal({
       setGeneratedBlocks(data.data.blocks || []);
       setPhase("preview");
     },
+    onError: () => {
+      showError("Could not generate study plan", "Please check your topics and try again.");
+    },
   });
 
   const addToSchedule = useMutation({
@@ -100,8 +104,12 @@ export function StudyPlanModal({
       if (error) throw error;
     },
     onSuccess: () => {
+      showSuccess("Study plan added to schedule");
       onOpenChange(false);
       router.push("/schedule");
+    },
+    onError: () => {
+      showError("Could not save schedule blocks", "Please try again.");
     },
   });
 

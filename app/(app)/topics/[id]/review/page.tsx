@@ -8,6 +8,7 @@ import { MasteryBadge } from "@/components/topics/MasteryBadge";
 import { computeSM2 } from "@/lib/sm2";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { showSuccess, showError } from "@/lib/toast";
 import type { Topic } from "@/types/database";
 
 type ReviewPhase = "studying" | "rating" | "done";
@@ -80,7 +81,11 @@ export default function ReviewSessionPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["topic", topicId] });
       queryClient.invalidateQueries({ queryKey: ["topics"] });
+      showSuccess("Review saved");
       setPhase("done");
+    },
+    onError: () => {
+      showError("Could not save review", "Please try again.");
     },
   });
 

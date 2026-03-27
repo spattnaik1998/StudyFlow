@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { MasteryBadge } from "@/components/topics/MasteryBadge";
 import { Trash2, Edit2, ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { showSuccess, showError } from "@/lib/toast";
 import type { Topic, TopicReview } from "@/types/database";
 
 export default function TopicDetailPage() {
@@ -51,7 +52,11 @@ export default function TopicDetailPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["topics"] });
+      showSuccess("Topic deleted");
       router.push("/topics");
+    },
+    onError: () => {
+      showError("Could not delete topic", "Please try again.");
     },
   });
 

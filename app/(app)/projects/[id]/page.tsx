@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { StudyPlanModal } from "@/components/ai/StudyPlanModal";
 import { ArrowLeft, Edit2, MoreVertical, Plus, Sparkles } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { showSuccess, showError } from "@/lib/toast";
 import type { Project } from "@/types/database";
 
 export default function ProjectDetailPage({ params }: { params: { id: string } }) {
@@ -40,7 +41,11 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
+      showSuccess("Project archived");
       window.location.href = "/projects";
+    },
+    onError: () => {
+      showError("Could not archive project", "Please try again.");
     },
   });
 

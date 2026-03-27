@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { WeekCalendar } from "@/components/schedule/WeekCalendar";
 import { BlockForm } from "@/components/schedule/BlockForm";
 import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { showSuccess, showError } from "@/lib/toast";
 import type { ScheduleBlock, Project } from "@/types/database";
 
 function getMonday(date: Date): Date {
@@ -85,6 +86,10 @@ export default function SchedulePage() {
       setShowForm(false);
       setEditingBlock(null);
       setSelectedDate(null);
+      showSuccess("Block created");
+    },
+    onError: () => {
+      showError("Could not create block", "Please try again.");
     },
   });
 
@@ -101,6 +106,10 @@ export default function SchedulePage() {
       setShowForm(false);
       setEditingBlock(null);
       setSelectedDate(null);
+      showSuccess("Block updated");
+    },
+    onError: () => {
+      showError("Could not update block", "Please try again.");
     },
   });
 
@@ -111,6 +120,10 @@ export default function SchedulePage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["schedule_blocks"] });
+      showSuccess("Block deleted");
+    },
+    onError: () => {
+      showError("Could not delete block", "Please try again.");
     },
   });
 

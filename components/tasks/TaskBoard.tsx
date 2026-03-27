@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import { GripVertical, Trash2, Edit2 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { showSuccess, showError } from "@/lib/toast";
 import type { Task, Project } from "@/types/database";
 
 interface TaskBoardProps {
@@ -39,6 +40,10 @@ export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       onRefresh?.();
+      showSuccess("Task updated");
+    },
+    onError: () => {
+      showError("Could not update task", "Please try again.");
     },
   });
 
@@ -50,6 +55,10 @@ export function TaskBoard({ tasks, projects, onRefresh }: TaskBoardProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       onRefresh?.();
+      showSuccess("Task deleted");
+    },
+    onError: () => {
+      showError("Could not delete task", "Please try again.");
     },
   });
 

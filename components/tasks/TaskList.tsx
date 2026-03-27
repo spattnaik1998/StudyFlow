@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import { Trash2, CheckCircle2, Circle, AlertCircle, Edit2 } from "lucide-react";
 import { formatDate, formatDuration } from "@/lib/utils";
+import { showSuccess, showError } from "@/lib/toast";
 import type { Task, Project } from "@/types/database";
 
 interface TaskListProps {
@@ -37,6 +38,10 @@ export function TaskList({ tasks, projects, onRefresh }: TaskListProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       onRefresh?.();
+      showSuccess("Task updated");
+    },
+    onError: () => {
+      showError("Could not update task", "Please try again.");
     },
   });
 
@@ -48,6 +53,10 @@ export function TaskList({ tasks, projects, onRefresh }: TaskListProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       onRefresh?.();
+      showSuccess("Task deleted");
+    },
+    onError: () => {
+      showError("Could not delete task", "Please try again.");
     },
   });
 
