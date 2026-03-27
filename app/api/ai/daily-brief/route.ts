@@ -1,8 +1,7 @@
 import { openai } from "@/lib/openai";
 import { createServerClient_ } from "@/lib/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
-
-export async function GET(request: NextRequest) {
+import { apiSuccess, apiError, ERROR_CODES } from "@/lib/api-response";
+export async function GET() {
   try {
     const supabase = await createServerClient_();
 
@@ -12,7 +11,7 @@ export async function GET(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return apiError(ERROR_CODES.UNAUTHORIZED, "Unauthorized", 401);
     }
 
     const today = new Date();
@@ -30,13 +29,10 @@ export async function GET(request: NextRequest) {
       .limit(1);
 
     if (cached && cached.length > 0) {
-      return NextResponse.json({
-        success: true,
-        data: {
-          brief: cached[0].content.brief,
-          generated_at: cached[0].generated_at,
-          cached: true,
-        },
+      return apiSuccess({
+        brief: cached[0].content.brief,
+        generated_at: cached[0].generated_at,
+        cached: true,
       });
     }
 
@@ -118,22 +114,13 @@ Be concise, warm, and action-oriented. Avoid repetition.`,
       expires_at: midnight.toISOString(),
     });
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        brief,
-        generated_at: new Date().toISOString(),
-        cached: false,
-      },
+    return apiSuccess({
+      brief,
+      generated_at: new Date().toISOString(),
+      cached: false,
     });
   } catch (error) {
     console.error("Daily brief error:", error);
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error ? error.message : "Failed to generate brief",
-      },
-      { status: 500 }
-    );
+    return apiError(ERROR_CODES.INTERNAL_ERROR, "An unexpected error occurred", 500);
   }
 }

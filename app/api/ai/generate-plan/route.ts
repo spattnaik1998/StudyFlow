@@ -1,7 +1,8 @@
 import { openai } from "@/lib/openai";
 import { createServerClient_ } from "@/lib/supabase/server";
+import { apiSuccess, apiError, ERROR_CODES } from "@/lib/api-response";
 import { GenerateStudyPlanRequest } from "@/types/api";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,17 +14,14 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return apiError(ERROR_CODES.UNAUTHORIZED, "Unauthorized", 401);
     }
 
     const body: GenerateStudyPlanRequest = await request.json();
     const { project_id, exam_date, chapters, total_study_hours } = body;
 
     if (!project_id || !exam_date || !chapters || chapters.length === 0) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+      return apiError(ERROR_CODES.VALIDATION_ERROR, "Missing required fields", 400);
     }
 
     // Fetch project from Supabase
@@ -34,10 +32,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (projectError || !project) {
-      return NextResponse.json(
-        { error: "Project not found" },
-        { status: 404 }
-      );
+      return apiError(ERROR_CODES.NOT_FOUND, "Project not found", 404);
     }
 
     const hoursPerDay = total_study_hours ? total_study_hours / 7 : 3; // Default 3 hours/day
@@ -93,30 +88,16 @@ Return ONLY the JSON object with the blocks array.`,
 
     const content = response.choices[0].message.content;
     if (!content) {
-      return NextResponse.json(
-        { error: "No response from OpenAI" },
-        { status: 500 }
-      );
+      return apiError(ERROR_CODES.INTERNAL_ERROR, "No response from OpenAI", 500);
     }
 
     const parsed = JSON.parse(content);
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        blocks: parsed.blocks || [],
-      },
+    return apiSuccess({
+      blocks: parsed.blocks || [],
     });
   } catch (error) {
     console.error("Generate plan error:", error);
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to generate study plan",
-      },
-      { status: 500 }
-    );
+    return apiError(ERROR_CODES.INTERNAL_ERROR, "An unexpected error occurred", 500);
   }
 }
